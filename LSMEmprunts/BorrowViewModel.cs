@@ -1,6 +1,7 @@
 ﻿using LSMEmprunts.Data;
 using Mvvm;
 using Mvvm.Commands;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace LSMEmprunts
         public BorrowViewModel()
         {
             ValidateCommand = new DelegateCommand(ValidateCmd, CanValidateCmd);
-            CancelCommand = new DelegateCommand(CancelCmd, CanCancelCmd);
+            CancelCommand = new DelegateCommand(CancelCmd);
 
             using (var context = ContextFactory.OpenContext())
             {
@@ -47,15 +48,15 @@ namespace LSMEmprunts
             {
                 var lowerValue = value.ToLowerInvariant();
                 var matchingUsersByName = Users.Where(e => e.Name.ToLowerInvariant().StartsWith(lowerValue)).ToList();
-                if (matchingUsersByName.Count==1)
+                if (matchingUsersByName.Count == 1)
                 {
                     System.Diagnostics.Debug.WriteLine("User input - found matching user by name");
                     SelectedUser = matchingUsersByName[0];
                     return;
                 }
-                
+
                 var matchingUserByLicence = Users.FirstOrDefault(e => e.LicenceScanId == value);
-                if (matchingUserByLicence!=null)
+                if (matchingUserByLicence != null)
                 {
                     System.Diagnostics.Debug.WriteLine("User input - found matching user by licence");
                     SelectedUser = matchingUserByLicence;
@@ -67,13 +68,6 @@ namespace LSMEmprunts
                 _SelectedUser = null;
                 OnPropertyChanged(nameof(SelectedUser));
             }
-        }
-
-        private bool _UserSet = false;
-        public bool UserSet
-        {
-            get => _UserSet;
-            set => SetProperty(ref _UserSet, value);
         }
 
         public ObservableCollection<Gear> BorrowedGears { get; } = new ObservableCollection<Gear>();
@@ -94,58 +88,67 @@ namespace LSMEmprunts
                 using (var context = ContextFactory.OpenContext())
                 {
                     var valueLower = value.ToLowerInvariant();
-                    var gearByName = context.Gears.FirstOrDefault(e => e.Name.ToLowerInvariant() == valueLower);
-                    if (gearByName!=null)
+                    var matchingGear = context.Gears.FirstOrDefault(e => e.Name.ToLowerInvariant() == valueLower);
+
+
+                    if (matchingGear != null)
                     {
                         System.Diagnostics.Debug.WriteLine("Found matching gear by name");
-                        BorrowedGears.Add(gearByName);
-                        SetProperty(ref _SelectedGearId, string.Empty);
-                        return;
                     }
-
-                    var gearByScan = context.Gears.FirstOrDefault(e => e.BarCode == value);
-                    if (gearByScan!=null)
+                    else
                     {
-                        System.Diagnostics.Debug.WriteLine("Found matching gear by scan");
-                        BorrowedGears.Add(gearByScan);
-                        SetProperty(ref _SelectedGearId, string.Empty);
-                        return;
+                        matchingGear = context.Gears.FirstOrDefault(e => e.BarCode == value);
+                        if (matchingGear!=null)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Found matching gear by scan");
+                        }
                     }
 
-                    //if the gear was not found, simply update the typed value
-                    SetProperty(ref _SelectedGearId, value);
+                    if (matchingGear != null)
+                    {
+                        BorrowedGears.Add(matchingGear);
+                        SetProperty(ref _SelectedGearId, string.Empty);
+                        ValidateCommand.RaiseCanExecuteChanged();
+                    }
+                    else
+                    {
+                        //if the gear was not found, simply update the typed value
+                        SetProperty(ref _SelectedGearId, value);
+                    }
                 }
             }
         }
 
         public DelegateCommand ValidateCommand { get; }
-        private void ValidateCmd()
+        private async void ValidateCmd()
         {
-            if (!UserSet)
+            var date = DateTime.Now;
+            using (var context = ContextFactory.OpenContext())
             {
-                UserSet = true;
-                return;
+                await context.Borrowings.AddRangeAsync(BorrowedGears.Select(e =>
+                new Borrowing
+                {
+                    BorrowTime = date,
+                    GearId = e.Id,
+                    UserId = SelectedUser.Id,
+                    Comment = Comment,
+                    State = BorrowingState.Open
+                }));
+                await context.SaveChangesAsync();
             }
+
+            MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
         }
         private bool CanValidateCmd()
         {
-            if (!UserSet)
-            {
-                return SelectedUser != null;
-            }
-            else
-            {
-                return BorrowedGears.Any();
-            }
+            return SelectedUser != null && BorrowedGears.Any();
         }
 
         public DelegateCommand CancelCommand { get; }
         private void CancelCmd()
         {
+            MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
         }
-        private bool CanCancelCmd()
-        {
-            return true;
-        }
+        
     }
 }

@@ -18,7 +18,7 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" IsEnabled="{Binding UserSet, Converter={StaticResource BoolToInvertConverter}}">
+        <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
@@ -42,7 +42,7 @@
             </TextBox>
         </Grid>
 
-        <Grid Grid.Column="1" IsEnabled="{Binding UserSet}">
+        <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -59,7 +59,7 @@
             </TextBox>
 
             <TextBlock Grid.Row="2">Commentaire</TextBlock>
-            <TextBox Grid.Row="3" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Commennt}"/>
+            <TextBox Grid.Row="3" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Comment}"/>
 
             <DataGrid Grid.Row="4" ItemsSource="{Binding BorrowedGears}" Margin="0 5"
                       AutoGenerateColumns="False" IsReadOnly="True">

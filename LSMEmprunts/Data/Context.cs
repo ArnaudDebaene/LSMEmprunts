@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace LSMEmprunts.Data
 {
-
-
     public class Context : DbContext
     {
         public Context(DbContextOptions<Context> options)
@@ -27,11 +20,6 @@ namespace LSMEmprunts.Data
             modelBuilder.ApplyConfiguration(new GearMapping());
             modelBuilder.ApplyConfiguration(new BorrowingMapping());
         }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlite();
-        //}
     }
 
     public class ContextesignTimeFactory : IDesignTimeDbContextFactory<Context>

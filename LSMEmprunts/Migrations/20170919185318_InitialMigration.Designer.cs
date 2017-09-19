@@ -11,7 +11,7 @@ using System;
 namespace LSMEmprunts.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20170919130655_InitialMigration")]
+    [Migration("20170919185318_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,8 @@ namespace LSMEmprunts.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("BorrowTime");
+
+                    b.Property<string>("Comment");
 
                     b.Property<int>("GearId");
 

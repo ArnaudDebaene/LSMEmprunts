@@ -1,4 +1,5 @@
 ﻿using LSMEmprunts.Data;
+using Microsoft.EntityFrameworkCore;
 using Mvvm;
 using Mvvm.Commands;
 using System;
@@ -27,8 +28,8 @@ namespace LSMEmprunts
                 ReturnCommand = new DelegateCommand(ReturnCmd);
 
                 _ActiveBorrowings = new ObservableCollection<Borrowing>(
-                    context.Borrowings.Where(e => e.State == BorrowingState.Open)
-                    );
+                    context.Borrowings.Include(e=>e.User).Include(e=>e.Gear)
+                    .Where(e => e.State == BorrowingState.Open));
             }
 
             ActiveBorrowings = CollectionViewSource.GetDefaultView(_ActiveBorrowings);

@@ -44,6 +44,7 @@ namespace LSMEmprunts.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     BorrowTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Comment = table.Column<string>(type: "TEXT", nullable: true),
                     GearId = table.Column<int>(type: "INTEGER", nullable: false),
                     ReturnTime = table.Column<DateTime>(type: "TEXT", nullable: true),
                     State = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 0),

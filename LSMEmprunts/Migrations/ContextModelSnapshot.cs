@@ -26,6 +26,8 @@ namespace LSMEmprunts.Migrations
 
                     b.Property<DateTime>("BorrowTime");
 
+                    b.Property<string>("Comment");
+
                     b.Property<int>("GearId");
 
                     b.Property<DateTime?>("ReturnTime");

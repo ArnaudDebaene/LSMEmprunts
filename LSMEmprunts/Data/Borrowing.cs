@@ -26,6 +26,8 @@ namespace LSMEmprunts.Data
         public DateTime? ReturnTime { get; set; }
 
         public BorrowingState State { get; set; }
+
+        public string Comment { get; set; }
     }
 
     class BorrowingMapping : IEntityTypeConfiguration<Borrowing>
