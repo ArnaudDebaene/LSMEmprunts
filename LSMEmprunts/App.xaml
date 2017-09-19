@@ -4,6 +4,17 @@
              xmlns:local="clr-namespace:LSMEmprunts"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <DataTemplate DataType="{x:Type local:HomeViewModel}">
+            <local:HomeView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:BorrowViewModel}">
+            <local:BorrowView />
+        </DataTemplate>
+
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <local:BoolToInvertConverter x:Key="BoolToInvertConverter" />
     </Application.Resources>
+
+    
 </Application>
