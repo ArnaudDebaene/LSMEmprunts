@@ -20,7 +20,11 @@ namespace LSMEmprunts
         public object CurrentPageViewModel
         {
             get => _CurrentPageViewModel;
-            set => SetProperty(ref _CurrentPageViewModel, value);
+            set
+            {
+                (_CurrentPageViewModel as IDisposable)?.Dispose();
+                SetProperty(ref _CurrentPageViewModel, value);
+            }
         }
 
 

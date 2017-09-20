@@ -43,7 +43,9 @@ namespace LSMEmprunts
 
         public ICommand ReturnCommand { get; }
         private void ReturnCmd()
-        { }
+        {
+            MainWindowViewModel.Instance.CurrentPageViewModel = new ReturnViewModel();
+        }
 
     }
 }

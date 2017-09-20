@@ -12,8 +12,56 @@
             <local:BorrowView />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type local:ReturnViewModel}">
+            <local:ReturnView />
+        </DataTemplate>
+
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:BoolToInvertConverter x:Key="BoolToInvertConverter" />
+
+        <DrawingBrush x:Key="ReturnIcon" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <DrawingGroup.Children>
+                        <GeometryDrawing Brush="Transparent" Geometry="F1 M 320,128C 341.333,128 362.667,128 378.667,128C 394.667,128 405.333,128 410.667,133.333C 416,138.667 416,149.333 416,160C 416,170.667 416,181.333 416,192C 416,202.667 416,213.333 410.667,218.667C 405.333,224 394.667,224 378.667,224C 362.667,224 341.333,224 320,224">
+                            <GeometryDrawing.Pen>
+                                <Pen Thickness="14" LineJoin="Round" Brush="#FF000000"/>
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FF000000" Geometry="F1 M 275,159.917L 339,159.917L 339,191.917L 275,191.917L 275,159.917 Z "/>
+                        <GeometryDrawing Brush="#FF000000" Geometry="F1 M 386.321,175.917L 339,148.596L 339,203.237L 386.321,175.917 Z "/>
+                    </DrawingGroup.Children>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+
+        <DrawingBrush x:Key="BorrowIcon" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <DrawingGroup.Children>
+                        <GeometryDrawing Brush="Transparent" Geometry="F1 M 320,224C 298.667,224 277.333,224 261.333,224C 245.333,224 234.667,224 229.333,218.667C 224,213.333 224,202.667 224,192C 224,181.333 224,170.667 224,160C 224,149.333 224,138.667 229.333,133.333C 234.667,128 245.333,128 261.333,128C 277.333,128 298.667,128 320,128">
+                            <GeometryDrawing.Pen>
+                                <Pen Thickness="14" LineJoin="Round" Brush="#FF000000"/>
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FF000000" Geometry="F1 M 275,159.917L 339,159.917L 339,191.917L 275,191.917L 275,159.917 Z "/>
+                        <GeometryDrawing Brush="#FF000000" Geometry="F1 M 386.321,175.917L 339,148.596L 339,203.237L 386.321,175.917 Z "/>
+                    </DrawingGroup.Children>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+
+        <DrawingBrush x:Key="CheckIcon" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <GeometryDrawing Brush="Black" Geometry="F1 M 23.7501,33.25L 34.8334,44.3333L 52.2499,22.1668L 56.9999,26.9168L 34.8334,53.8333L 19.0001,38L 23.7501,33.25 Z " />
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+
+        <DrawingBrush x:Key="CancelIcon" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <GeometryDrawing Brush="Black" Geometry="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z " />
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
     </Application.Resources>
 
     

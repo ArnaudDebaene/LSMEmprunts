@@ -11,7 +11,7 @@ using System;
 namespace LSMEmprunts.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20170919185318_InitialMigration")]
+    [Migration("20170919194005_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,7 @@ namespace LSMEmprunts.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(0);
 
-                    b.Property<int>("UserId");
+                    b.Property<int?>("UserId");
 
                     b.HasKey("Id");
 

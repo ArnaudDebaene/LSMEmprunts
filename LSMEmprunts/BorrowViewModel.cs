@@ -10,6 +10,8 @@ namespace LSMEmprunts
 {
     public class BorrowViewModel : BindableBase
     {
+        private readonly Context _Context;
+
         public List<User> Users { get; }
 
         private User _SelectedUser;
@@ -28,13 +30,17 @@ namespace LSMEmprunts
 
         public BorrowViewModel()
         {
+            _Context = ContextFactory.OpenContext();
+
             ValidateCommand = new DelegateCommand(ValidateCmd, CanValidateCmd);
             CancelCommand = new DelegateCommand(CancelCmd);
 
-            using (var context = ContextFactory.OpenContext())
-            {
-                Users = context.Users.ToList();
-            }
+            Users = _Context.Users.ToList();
+        }
+
+        public void Dispose()
+        {
+            _Context.Dispose();
         }
 
         private string _SelectedUserText;
@@ -85,37 +91,35 @@ namespace LSMEmprunts
             get => _SelectedGearId;
             set
             {
-                using (var context = ContextFactory.OpenContext())
+                var valueLower = value.ToLowerInvariant();
+                var matchingGear = _Context.Gears.FirstOrDefault(e => e.Name.ToLowerInvariant() == valueLower);
+
+
+                if (matchingGear != null)
                 {
-                    var valueLower = value.ToLowerInvariant();
-                    var matchingGear = context.Gears.FirstOrDefault(e => e.Name.ToLowerInvariant() == valueLower);
-
-
+                    System.Diagnostics.Debug.WriteLine("Found matching gear by name");
+                }
+                else
+                {
+                    matchingGear = _Context.Gears.FirstOrDefault(e => e.BarCode == value);
                     if (matchingGear != null)
                     {
-                        System.Diagnostics.Debug.WriteLine("Found matching gear by name");
-                    }
-                    else
-                    {
-                        matchingGear = context.Gears.FirstOrDefault(e => e.BarCode == value);
-                        if (matchingGear!=null)
-                        {
-                            System.Diagnostics.Debug.WriteLine("Found matching gear by scan");
-                        }
-                    }
-
-                    if (matchingGear != null)
-                    {
-                        BorrowedGears.Add(matchingGear);
-                        SetProperty(ref _SelectedGearId, string.Empty);
-                        ValidateCommand.RaiseCanExecuteChanged();
-                    }
-                    else
-                    {
-                        //if the gear was not found, simply update the typed value
-                        SetProperty(ref _SelectedGearId, value);
+                        System.Diagnostics.Debug.WriteLine("Found matching gear by scan");
                     }
                 }
+
+                if (matchingGear != null)
+                {
+                    BorrowedGears.Add(matchingGear);
+                    SetProperty(ref _SelectedGearId, string.Empty);
+                    ValidateCommand.RaiseCanExecuteChanged();
+                }
+                else
+                {
+                    //if the gear was not found, simply update the typed value
+                    SetProperty(ref _SelectedGearId, value);
+                }
+
             }
         }
 
@@ -123,19 +127,18 @@ namespace LSMEmprunts
         private async void ValidateCmd()
         {
             var date = DateTime.Now;
-            using (var context = ContextFactory.OpenContext())
+
+            await _Context.Borrowings.AddRangeAsync(BorrowedGears.Select(e =>
+            new Borrowing
             {
-                await context.Borrowings.AddRangeAsync(BorrowedGears.Select(e =>
-                new Borrowing
-                {
-                    BorrowTime = date,
-                    GearId = e.Id,
-                    UserId = SelectedUser.Id,
-                    Comment = Comment,
-                    State = BorrowingState.Open
-                }));
-                await context.SaveChangesAsync();
-            }
+                BorrowTime = date,
+                Gear = e,
+                User = SelectedUser,
+                Comment = Comment,
+                State = BorrowingState.Open
+            }));
+            await _Context.SaveChangesAsync();
+
 
             MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
         }

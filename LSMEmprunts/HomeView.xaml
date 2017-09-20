@@ -6,6 +6,26 @@
              xmlns:local="clr-namespace:LSMEmprunts"
              mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="800"
              d:DataContext="{d:DesignInstance Type=local:HomeViewModel}">
+    <UserControl.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+    </UserControl.Resources>
     <Grid>
         <!--<Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -22,8 +42,20 @@
             <Rectangle Grid.Column="1" Width="5" Fill="Black" />
 
             <UniformGrid Grid.Column="0" Rows="2">
-                <Button Width="70" VerticalAlignment="Center" Command="{Binding BorrowCommand}">Emprunt</Button>
-                <Button Width="70" VerticalAlignment="Center" Command="{Binding ReturnCommand}">Retour</Button>
+                <Button VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Command="{Binding BorrowCommand}">
+                    <StackPanel Orientation="Vertical">
+                        <Rectangle Margin="5" Height="70" Width="70" Fill="{DynamicResource BorrowIcon}" />
+                        <TextBlock HorizontalAlignment="Center">Emprunt</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Command="{Binding ReturnCommand}">
+                    <StackPanel Orientation="Vertical">
+                        <Rectangle Margin="5" Height="70" Width="70" Fill="{DynamicResource ReturnIcon}" />
+                        <TextBlock HorizontalAlignment="Center">Retour</TextBlock>
+                    </StackPanel>
+                </Button>
             </UniformGrid>
 
             <DataGrid Grid.Column="2" Margin="10" IsReadOnly="True"

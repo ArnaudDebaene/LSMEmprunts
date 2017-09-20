@@ -15,7 +15,7 @@ namespace LSMEmprunts.Data
     {
         public int Id { get; set; }
 
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public User User { get; set; }
 
         public int GearId { get; set; }
@@ -38,7 +38,8 @@ namespace LSMEmprunts.Data
 
             builder.Property(e => e.State).HasDefaultValue(BorrowingState.Open);
 
-            builder.HasOne(e => e.User).WithMany(e=>e.Borrowings).HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(e => e.User).WithMany(e=>e.Borrowings).IsRequired(false)
+                .HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(e => e.Gear).WithMany(e=>e.Borrowings).HasForeignKey(e => e.GearId).OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(e => e.State);

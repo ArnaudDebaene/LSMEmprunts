@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="LSMEmprunts.ReturnView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:local="clr-namespace:LSMEmprunts"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:ReturnViewModel}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
+            <TextBlock>Scannez le matériel ou saisissez son nom</TextBlock>
+            <TextBox Text="{Binding SelectedGearId}">
+                <i:Interaction.Behaviors>
+                    <local:BindOnEnterBehavior />
+                </i:Interaction.Behaviors>
+            </TextBox>
+        </StackPanel>
+
+        <DataGrid Grid.Column="1" IsReadOnly="True" Margin="10"
+                  AutoGenerateColumns="False" ItemsSource="{Binding ItemsBorrowing}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Nom" Binding="{Binding SelectedGearId.Name}" />
+                <DataGridTextColumn Header="Type" Binding="{Binding Gear.GearType}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <UniformGrid Grid.Row="1" Grid.ColumnSpan="2" Columns="2">
+            <Button HorizontalAlignment="Center">Validate</Button>
+            <Button HorizontalAlignment="Center">Cancel</Button>
+        </UniformGrid>
+    </Grid>
+    
+</UserControl>

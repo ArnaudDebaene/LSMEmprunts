@@ -48,7 +48,7 @@ namespace LSMEmprunts.Migrations
                     GearId = table.Column<int>(type: "INTEGER", nullable: false),
                     ReturnTime = table.Column<DateTime>(type: "TEXT", nullable: true),
                     State = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 0),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {

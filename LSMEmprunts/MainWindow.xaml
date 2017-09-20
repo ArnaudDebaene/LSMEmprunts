@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LSMEmprunts"
         mc:Ignorable="d" 
-        Title="MainWindow" Height="350" Width="525"
-        DataContext="{x:Static local:MainWindowViewModel.Instance}">
+        Title="MainWindow" Height="768" Width="1024"
+        DataContext="{x:Static local:MainWindowViewModel.Instance}" 
+        FontSize="18.667">
     
     <ContentControl Content="{Binding CurrentPageViewModel}" />
 </Window>
