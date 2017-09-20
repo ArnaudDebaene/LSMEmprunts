@@ -1,11 +1,9 @@
 ﻿using LSMEmprunts.Data;
 using Mvvm;
+using Mvvm.Commands;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LSMEmprunts
 {
@@ -17,6 +15,9 @@ namespace LSMEmprunts
 
         public ReturnViewModel()
         {
+            ValidateCommand = new DelegateCommand(ValidateCmd, CanValidateCmd);
+            CancelCommand = new DelegateCommand(CancelCmd);
+
             _Context = ContextFactory.OpenContext();
         }
 
@@ -32,7 +33,7 @@ namespace LSMEmprunts
             set
             {
                 var valueLower = value.ToLowerInvariant();
-                var matchingGear = _Context.Gears.FirstOrDefault(e => e.Name == valueLower);
+                var matchingGear = _Context.Gears.FirstOrDefault(e => e.Name.ToLowerInvariant() == valueLower);
                 if (matchingGear != null)
                 {
                     System.Diagnostics.Debug.WriteLine("Found a matching gear by name");
@@ -57,7 +58,7 @@ namespace LSMEmprunts
                     {
                         matchingBorrowing.ReturnTime = now;
                         matchingBorrowing.State = BorrowingState.GearReturned;
-                        _Context.SaveChanges();                        
+                        ClosingBorrowings.Add(matchingBorrowing);
                     }
                     else
                     {
@@ -71,8 +72,8 @@ namespace LSMEmprunts
                             Comment = "Retourné sans avoir été emprunté",
                         };
                         _Context.Borrowings.Add(borrowing);
-                        _Context.SaveChanges();
                         //TODO : display warning
+                        ClosingBorrowings.Add(borrowing);
                     }
 
                     SetProperty(ref _SelectedGearId, string.Empty);
@@ -84,6 +85,18 @@ namespace LSMEmprunts
             }
         }
 
+        public DelegateCommand ValidateCommand { get; }
+        private void ValidateCmd()
+        {
+            _Context.SaveChanges();
+            MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
+        }
+        private bool CanValidateCmd() => ClosingBorrowings.Any();        
 
+        public DelegateCommand CancelCommand { get; }
+        private void CancelCmd()
+        {
+            MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
+        }
     }
 }

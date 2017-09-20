@@ -73,11 +73,11 @@
             </DataGrid>
         </Grid>
 
-        <UniformGrid Grid.Row="1" Grid.ColumnSpan="2" Columns="2" Margin="5">
-            <Button HorizontalAlignment="Center" Command="{Binding ValidateCommand}">
+        <UniformGrid Grid.Row="1" Grid.Column="2" Columns="2" HorizontalAlignment="Right">
+            <Button HorizontalAlignment="Center" Command="{Binding ValidateCommand}" Margin="5">
                 <Rectangle Width="70" Height="70" Margin="5" Fill="{StaticResource CheckIcon}"/>
             </Button>
-            <Button HorizontalAlignment="Center" Command="{Binding CancelCommand}">
+            <Button HorizontalAlignment="Center" Command="{Binding CancelCommand}" Margin="5">
                 <Rectangle Width="70" Height="70" Margin="5" Fill="{StaticResource CancelIcon}"/>
             </Button>
         </UniformGrid>

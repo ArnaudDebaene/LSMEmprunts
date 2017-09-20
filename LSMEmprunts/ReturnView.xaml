@@ -15,8 +15,11 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+
+        <Rectangle Grid.Column="1" Width="5" Fill="Black" />
 
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
             <TextBlock>Scannez le matériel ou saisissez son nom</TextBlock>
@@ -27,18 +30,24 @@
             </TextBox>
         </StackPanel>
 
-        <DataGrid Grid.Column="1" IsReadOnly="True" Margin="10"
-                  AutoGenerateColumns="False" ItemsSource="{Binding ItemsBorrowing}">
+        <DataGrid Grid.Column="2" IsReadOnly="True" Margin="10"
+                  AutoGenerateColumns="False" ItemsSource="{Binding ClosingBorrowings}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Nom" Binding="{Binding SelectedGearId.Name}" />
-                <DataGridTextColumn Header="Type" Binding="{Binding Gear.GearType}" />
+                <DataGridTextColumn Header="Nom" Binding="{Binding Gear.Name}" />
+                <DataGridTextColumn Header="Type" Binding="{Binding Gear.Type}" />
             </DataGrid.Columns>
         </DataGrid>
         
-        <UniformGrid Grid.Row="1" Grid.ColumnSpan="2" Columns="2">
-            <Button HorizontalAlignment="Center">Validate</Button>
-            <Button HorizontalAlignment="Center">Cancel</Button>
+        <UniformGrid Grid.Row="1" Grid.Column="3" Columns="2" HorizontalAlignment="Right">
+            <Button HorizontalAlignment="Center" Command="{Binding ValidateCommand}" Margin="5">
+                <Rectangle Width="70" Height="70" Margin="5" Fill="{StaticResource CheckIcon}"/>
+            </Button>
+            <Button HorizontalAlignment="Center" Command="{Binding CancelCommand}" Margin="5">
+                <Rectangle Width="70" Height="70" Margin="5" Fill="{StaticResource CancelIcon}"/>
+            </Button>
         </UniformGrid>
+
+        
     </Grid>
     
 </UserControl>
