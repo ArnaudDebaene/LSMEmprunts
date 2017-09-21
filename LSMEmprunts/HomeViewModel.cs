@@ -3,9 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Mvvm;
 using Mvvm.Commands;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace LSMEmprunts
@@ -41,9 +40,14 @@ namespace LSMEmprunts
         }
 
         public ICommand SettingsCommand { get; }
-        private void SettingsCmd()
+        private async void SettingsCmd()
         {
-            MainWindowViewModel.Instance.CurrentPageViewModel = new SettingsViewModel();
+            var vm = new PasswordDlgViewModel();
+            MainWindowViewModel.Instance.Dialogs.Add(vm);
+            if (await vm.Result == ConfigurationManager.AppSettings["AdminPassword"])
+            {
+                MainWindowViewModel.Instance.CurrentPageViewModel = new SettingsViewModel();
+            }
         }
 
     }

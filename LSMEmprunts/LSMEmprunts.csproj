@@ -151,6 +151,10 @@
     <Compile Include="MvvmDialogs\ViewModels\IDialogViewModel.cs" />
     <Compile Include="MvvmDialogs\ViewModels\IUserDialogViewModel.cs" />
     <Compile Include="MvvmDialogs\ViewModels\ModalDialogViewModelBase.cs" />
+    <Compile Include="PasswordDlg.xaml.cs">
+      <DependentUpon>PasswordDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PasswordDlgViewModel.cs" />
     <Compile Include="ProxyBase.cs" />
     <Compile Include="ReturnView.xaml.cs">
       <DependentUpon>ReturnView.xaml</DependentUpon>
@@ -204,6 +208,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PasswordDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ReturnView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

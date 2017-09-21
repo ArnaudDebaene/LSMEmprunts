@@ -7,7 +7,7 @@
              xmlns:data="clr-namespace:LSMEmprunts.Data"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:HomeViewModel}" 
-             d:DesignHeight="600" d:DesignWidth="600">
+             d:DesignHeight="600" d:DesignWidth="600" FocusManager.FocusedElement="{Binding ElementName=UserTextBox}">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -35,7 +35,7 @@
             </ListView>
 
             <TextBlock Grid.Row="1">Scannez votre licence ou saisissez votre nom</TextBlock>
-            <TextBox Grid.Row="2"
+            <TextBox x:Name="UserTextBox" Grid.Row="2"
                      Text="{Binding Path=SelectedUserText, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Behaviors>
                     <local:BindOnEnterBehavior/>

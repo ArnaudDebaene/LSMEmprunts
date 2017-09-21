@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MvvmDialogs.ViewModels
 {
-    public abstract class ModalDialogViewModelBase : IUserDialogViewModel
+    public abstract class ModalDialogViewModelBase : Mvvm.BindableBase, IUserDialogViewModel
     {
         protected ModalDialogViewModelBase()
         {
