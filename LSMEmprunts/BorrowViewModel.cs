@@ -33,7 +33,7 @@ namespace LSMEmprunts
             _Context = ContextFactory.OpenContext();
 
             ValidateCommand = new DelegateCommand(ValidateCmd, CanValidateCmd);
-            CancelCommand = new DelegateCommand(CancelCmd);
+            CancelCommand = new DelegateCommand(GoBackToHomeView);
 
             Users = _Context.Users.ToList();
         }
@@ -139,8 +139,7 @@ namespace LSMEmprunts
             }));
             await _Context.SaveChangesAsync();
 
-
-            MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
+            GoBackToHomeView();
         }
         private bool CanValidateCmd()
         {
@@ -148,7 +147,7 @@ namespace LSMEmprunts
         }
 
         public DelegateCommand CancelCommand { get; }
-        private void CancelCmd()
+        private void GoBackToHomeView()
         {
             MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
         }

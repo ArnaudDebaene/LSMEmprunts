@@ -4,10 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LSMEmprunts"
+        xmlns:dlgs="clr-namespace:MvvmDialogs.Behaviors"
         mc:Ignorable="d" 
         Title="MainWindow" Height="768" Width="1024"
-        DataContext="{x:Static local:MainWindowViewModel.Instance}" 
-        FontSize="18.667">
-    
+        DataContext="{x:Static local:MainWindowViewModel.Instance}"
+        dlgs:DialogBehavior.DialogViewModels="{Binding Dialogs}"
+        FontSize="18.667" WindowState="Maximized">
+
+        
     <ContentControl Content="{Binding CurrentPageViewModel}" />
 </Window>

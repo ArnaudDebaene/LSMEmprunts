@@ -2,23 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Mvvm;
 using Mvvm.Commands;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 
 namespace LSMEmprunts
 {
     public class HomeViewModel : BindableBase
-    {
-        private readonly ObservableCollection<Borrowing> _ActiveBorrowings;
-        
-        public ICollectionView ActiveBorrowings { get; }
+    {       
+        public ObservableCollection<Borrowing> ActiveBorrowings { get; }
 
         public HomeViewModel()
         {
@@ -26,13 +20,12 @@ namespace LSMEmprunts
             {
                 BorrowCommand = new DelegateCommand(BorrowCmd);
                 ReturnCommand = new DelegateCommand(ReturnCmd);
+                SettingsCommand = new DelegateCommand(SettingsCmd);
 
-                _ActiveBorrowings = new ObservableCollection<Borrowing>(
+                ActiveBorrowings = new ObservableCollection<Borrowing>(
                     context.Borrowings.Include(e=>e.User).Include(e=>e.Gear)
                     .Where(e => e.State == BorrowingState.Open));
             }
-
-            ActiveBorrowings = CollectionViewSource.GetDefaultView(_ActiveBorrowings);
         }
 
         public ICommand BorrowCommand { get; }
@@ -45,6 +38,12 @@ namespace LSMEmprunts
         private void ReturnCmd()
         {
             MainWindowViewModel.Instance.CurrentPageViewModel = new ReturnViewModel();
+        }
+
+        public ICommand SettingsCommand { get; }
+        private void SettingsCmd()
+        {
+            MainWindowViewModel.Instance.CurrentPageViewModel = new SettingsViewModel();
         }
 
     }

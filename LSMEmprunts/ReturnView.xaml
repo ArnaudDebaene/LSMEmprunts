@@ -6,7 +6,7 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:LSMEmprunts"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:ReturnViewModel}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -21,7 +21,7 @@
 
         <Rectangle Grid.Column="1" Width="5" Fill="Black" />
 
-        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical" Margin="5">
             <TextBlock>Scannez le matériel ou saisissez son nom</TextBlock>
             <TextBox Text="{Binding SelectedGearId}">
                 <i:Interaction.Behaviors>
@@ -38,14 +38,14 @@
             </DataGrid.Columns>
         </DataGrid>
         
-        <UniformGrid Grid.Row="1" Grid.Column="3" Columns="2" HorizontalAlignment="Right">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Right">
             <Button HorizontalAlignment="Center" Command="{Binding ValidateCommand}" Margin="5">
                 <Rectangle Width="70" Height="70" Margin="5" Fill="{StaticResource CheckIcon}"/>
             </Button>
             <Button HorizontalAlignment="Center" Command="{Binding CancelCommand}" Margin="5">
                 <Rectangle Width="70" Height="70" Margin="5" Fill="{StaticResource CancelIcon}"/>
             </Button>
-        </UniformGrid>
+        </StackPanel>
 
         
     </Grid>

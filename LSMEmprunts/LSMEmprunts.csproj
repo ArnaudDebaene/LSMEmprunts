@@ -137,16 +137,38 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GearHistoryDlg.xaml.cs">
+      <DependentUpon>GearHistoryDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GearHistoryDlgViewModel.cs" />
     <Compile Include="Migrations\20170919194005_InitialMigration.cs" />
     <Compile Include="Migrations\20170919194005_InitialMigration.designer.cs">
       <DependentUpon>20170919194005_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\ContextModelSnapshot.cs" />
+    <Compile Include="MvvmDialogs\Behaviors\DialogBehavior.cs" />
+    <Compile Include="MvvmDialogs\Presenters\IDialogBoxPresenter.cs" />
+    <Compile Include="MvvmDialogs\ViewModels\IDialogViewModel.cs" />
+    <Compile Include="MvvmDialogs\ViewModels\IUserDialogViewModel.cs" />
+    <Compile Include="MvvmDialogs\ViewModels\ModalDialogViewModelBase.cs" />
+    <Compile Include="ProxyBase.cs" />
     <Compile Include="ReturnView.xaml.cs">
       <DependentUpon>ReturnView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReturnViewModel.cs" />
+    <Compile Include="SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsViewModel.cs" />
+    <Compile Include="UserHistoryDlg.xaml.cs">
+      <DependentUpon>UserHistoryDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserHistoryDlgViewModel.cs" />
     <Page Include="BorrowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GearHistoryDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -183,6 +205,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ReturnView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserHistoryDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -6,33 +6,13 @@
              xmlns:local="clr-namespace:LSMEmprunts"
              mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="800"
              d:DataContext="{d:DesignInstance Type=local:HomeViewModel}">
-    <UserControl.Resources>
-        <Style x:Key="FocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
-        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
-        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
-        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
-        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
-        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
-        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-    </UserControl.Resources>
     <Grid>
-        <!--<Grid.RowDefinitions>
+        <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>-->
+        </Grid.RowDefinitions>
 
-        <Grid Margin="0,1,0,-1">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto"/>
@@ -69,6 +49,8 @@
             </DataGrid>
         </Grid>
 
-
+        <Button Grid.Row="1" HorizontalAlignment="Left" Command="{Binding SettingsCommand}" Margin="5">
+            <Rectangle Width="70" Height="70" Margin="5" Fill="{StaticResource SettingsIcon}"/>
+        </Button>
     </Grid>
 </UserControl>

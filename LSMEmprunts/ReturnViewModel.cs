@@ -16,7 +16,7 @@ namespace LSMEmprunts
         public ReturnViewModel()
         {
             ValidateCommand = new DelegateCommand(ValidateCmd, CanValidateCmd);
-            CancelCommand = new DelegateCommand(CancelCmd);
+            CancelCommand = new DelegateCommand(GoBackToHomeView);
 
             _Context = ContextFactory.OpenContext();
         }
@@ -89,12 +89,12 @@ namespace LSMEmprunts
         private void ValidateCmd()
         {
             _Context.SaveChanges();
-            MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
+            GoBackToHomeView();
         }
         private bool CanValidateCmd() => ClosingBorrowings.Any();        
 
         public DelegateCommand CancelCommand { get; }
-        private void CancelCmd()
+        private void GoBackToHomeView()
         {
             MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
         }
