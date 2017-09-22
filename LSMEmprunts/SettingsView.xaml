@@ -42,7 +42,7 @@
             </Grid.RowDefinitions>
             <TextBlock HorizontalAlignment="Center" Margin="10" FontSize="36">Utilisateurs</TextBlock>
             <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding Users}" 
-                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" Margin="0,6,0,34" Grid.RowSpan="2">
+                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
                 <DataGrid.RowValidationErrorTemplate>
                     <ControlTemplate />
                 </DataGrid.RowValidationErrorTemplate>
