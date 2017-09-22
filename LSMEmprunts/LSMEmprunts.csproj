@@ -141,6 +141,8 @@
       <DependentUpon>GearHistoryDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="GearHistoryDlgViewModel.cs" />
+    <Compile Include="GearProxy.cs" />
+    <Compile Include="Memento.cs" />
     <Compile Include="Migrations\20170919194005_InitialMigration.cs" />
     <Compile Include="Migrations\20170919194005_InitialMigration.designer.cs">
       <DependentUpon>20170919194005_InitialMigration.cs</DependentUpon>
@@ -168,6 +170,7 @@
       <DependentUpon>UserHistoryDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserHistoryDlgViewModel.cs" />
+    <Compile Include="UserProxy.cs" />
     <Page Include="BorrowView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -7,50 +7,6 @@ using System.Linq;
 
 namespace LSMEmprunts
 {
-    public class GearProxy : ProxyBase<Gear>
-    {
-        public GearProxy(Gear data)
-            :base(data)
-        {}
-
-        public string Name
-        {
-            get => WrappedElt.Name;
-            set => SetProperty(e => e.Name, value);
-        }
-
-        public GearType Type
-        {
-            get => WrappedElt.Type;
-            set => SetProperty(e => e.Type, value);
-        }
-
-        public string BarCode
-        {
-            get => WrappedElt.BarCode;
-            set => SetProperty(e => e.BarCode, value);
-        }
-    }
-
-    public class UserProxy : ProxyBase<User>
-    {
-        public UserProxy(User data)
-            :base(data)
-        { }
-
-        public string Name
-        {
-            get => WrappedElt.Name;
-            set => SetProperty(e => e.Name, value);
-        }
-
-        public string LicenceScanId
-        {
-            get => WrappedElt.LicenceScanId;
-            set => SetProperty(e => e.LicenceScanId, value);
-        }
-    }
-
     public class SettingsViewModel : BindableBase, IDisposable
     {
         private readonly Context _Context;
@@ -71,8 +27,16 @@ namespace LSMEmprunts
 
             _Context = ContextFactory.OpenContext();
 
-            Users = new ObservableCollection<UserProxy>(_Context.Users.AsEnumerable().Select(u => BuildProxy(u)));
-            Gears = new ObservableCollection<GearProxy>(_Context.Gears.AsEnumerable().Select(g => BuildProxy(g)));
+            Users = new ObservableCollection<UserProxy>();
+            foreach(var user in _Context.Users)
+            {
+                Users.Add(BuildProxy(user));
+            }
+            Gears = new ObservableCollection<GearProxy>();
+            foreach (var gear in _Context.Gears)
+            {
+                Gears.Add(BuildProxy(gear));
+            }
         }
 
         public void Dispose()
@@ -89,7 +53,7 @@ namespace LSMEmprunts
             _Context.SaveChanges();
             GoBackToHomeView();
         }
-        private bool CanValidateCmd() => _IsDirty;
+        private bool CanValidateCmd() => _IsDirty && ! HasErrors;
 
         public DelegateCommand CancelCommand { get; }
         private void GoBackToHomeView()
@@ -103,6 +67,8 @@ namespace LSMEmprunts
             _IsDirty = true;
             ValidateCommand.RaiseCanExecuteChanged();
         }
+
+        public bool HasErrors => Gears.Any(e => e.HasErrors) || Users.Any(e => e.HasErrors);
 
         public DelegateCommand CreateUserCommand { get; }
         private void CreateUser()
@@ -160,15 +126,17 @@ namespace LSMEmprunts
 
         private UserProxy BuildProxy(User u)
         {
-            var proxy = new UserProxy(u);
+            var proxy = new UserProxy(u, Users);
             proxy.PropertyChanged += (s, e) => SetDirty();
+            proxy.ErrorsChanged += (s, e) => ValidateCommand.RaiseCanExecuteChanged();
             return proxy;
         }
 
         private GearProxy BuildProxy(Gear g)
         {
-            var proxy = new GearProxy(g);
+            var proxy = new GearProxy(g, Gears);
             proxy.PropertyChanged += (s, e) => SetDirty();
+            proxy.ErrorsChanged += (s, e) => ValidateCommand.RaiseCanExecuteChanged();
             return proxy;
         }
     }

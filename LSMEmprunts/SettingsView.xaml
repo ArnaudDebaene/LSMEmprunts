@@ -6,7 +6,20 @@
              xmlns:local="clr-namespace:LSMEmprunts"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:SettingsViewModel}"
              d:DesignHeight="600" d:DesignWidth="600">
-    
+
+    <UserControl.Resources>
+        <Style x:Key="ErrorStyle" TargetType="TextBox">
+            <Setter Property="Padding" Value="-2" />
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="Background" Value="Red" />
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
     <Grid x:Name="Root">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -18,7 +31,7 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        
+
         <Rectangle Fill="Black" Width="5" Grid.Column="1" />
 
         <Grid>
@@ -29,18 +42,22 @@
             </Grid.RowDefinitions>
             <TextBlock HorizontalAlignment="Center" Margin="10" FontSize="36">Utilisateurs</TextBlock>
             <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding Users}" 
-                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" Margin="0,6,0,34" Grid.RowSpan="2">
+                <DataGrid.RowValidationErrorTemplate>
+                    <ControlTemplate />
+                </DataGrid.RowValidationErrorTemplate>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Nom" Binding="{Binding Name}" />
-                    <DataGridTextColumn Header="LicenceId" Binding="{Binding LicenceScanId}" />
+                    <DataGridTextColumn Header="Nom" EditingElementStyle="{StaticResource ErrorStyle}"
+                                        Binding="{Binding Name, ValidatesOnExceptions=True, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" />
+                    <DataGridTextColumn Header="LicenceId" EditingElementStyle="{StaticResource ErrorStyle}"
+                                        Binding="{Binding LicenceScanId, ValidatesOnExceptions=True,ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}" />
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="{x:Type local:UserProxy}">
                                 <Button 
                                     Command="{Binding ElementName=Root, Path=DataContext.DeleteUserCommand}"
                                     CommandParameter="{Binding }" Width="30"
-                                    Background="{StaticResource DeleteIcon}"
-                                    />
+                                    Background="{StaticResource DeleteIcon}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -68,10 +85,15 @@
             </Grid.RowDefinitions>
             <TextBlock HorizontalAlignment="Center" Margin="10" FontSize="36">Matériel</TextBlock>
             <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding Gears}" CanUserAddRows="False">
+                <DataGrid.RowValidationErrorTemplate>
+                    <ControlTemplate />
+                </DataGrid.RowValidationErrorTemplate>
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn Header="Type" SelectedItemBinding="{Binding Type}" ItemsSource="{Binding Source={StaticResource GearTypeEnum}}" />
-                    <DataGridTextColumn Header="Nom" Binding="{Binding Name}" />
-                    <DataGridTextColumn Header="Code Barre" Binding="{Binding BarCode}" />
+                    <DataGridTextColumn Header="Nom" EditingElementStyle="{StaticResource ErrorStyle}"
+                                        Binding="{Binding Name, ValidatesOnNotifyDataErrors=True, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                    <DataGridTextColumn Header="Code Barre" EditingElementStyle="{StaticResource ErrorStyle}"
+                                        Binding="{Binding BarCode, ValidatesOnNotifyDataErrors=True, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="{x:Type local:GearProxy}">
@@ -106,6 +128,6 @@
                 <Rectangle Width="70" Height="70" Margin="5" Fill="{StaticResource CancelIcon}"/>
             </Button>
         </StackPanel>
-        
+
     </Grid>
 </UserControl>
