@@ -7,11 +7,17 @@ using System.Linq;
 
 namespace LSMEmprunts
 {
+    public class ReturnInfo : BindableBase
+    {
+        public Borrowing Borrowing { get; set; }
+        public string Comment { get; set; }
+    }
+
     public class ReturnViewModel : BindableBase, IDisposable
     {
         private readonly Context _Context;
 
-        public ObservableCollection<Borrowing> ClosingBorrowings { get; } = new ObservableCollection<Borrowing>();
+        public ObservableCollection<ReturnInfo> ClosingBorrowings { get; } = new ObservableCollection<ReturnInfo>();
 
         public ReturnViewModel()
         {
@@ -49,6 +55,15 @@ namespace LSMEmprunts
 
                 if (matchingGear != null)
                 {
+                    //check for double input of a given gear
+                    if (ClosingBorrowings.Any(e=>e.Borrowing.Gear==matchingGear))
+                    {
+                        var vm = new WarningWindowViewModel("Matériel déjà rendu");
+                        MainWindowViewModel.Instance.Dialogs.Add(vm);
+                        SetProperty(ref _SelectedGearId, string.Empty);
+                        return;
+                    }
+
                     var now = DateTime.Now;
 
                     var matchingBorrowing = _Context.Borrowings
@@ -58,7 +73,7 @@ namespace LSMEmprunts
                     {
                         matchingBorrowing.ReturnTime = now;
                         matchingBorrowing.State = BorrowingState.GearReturned;
-                        ClosingBorrowings.Add(matchingBorrowing);
+                        ClosingBorrowings.Add(new ReturnInfo { Borrowing = matchingBorrowing });
                     }
                     else
                     {
@@ -72,8 +87,7 @@ namespace LSMEmprunts
                             Comment = "Retourné sans avoir été emprunté",
                         };
                         _Context.Borrowings.Add(borrowing);
-                        //TODO : display warning
-                        ClosingBorrowings.Add(borrowing);
+                        ClosingBorrowings.Add(new ReturnInfo { Borrowing = borrowing, Comment="Retourné sans avoir été emprunté" });
                     }
 
                     SetProperty(ref _SelectedGearId, string.Empty);

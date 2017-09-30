@@ -33,8 +33,9 @@
         <DataGrid Grid.Column="2" IsReadOnly="True" Margin="10"
                   AutoGenerateColumns="False" ItemsSource="{Binding ClosingBorrowings}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Nom" Binding="{Binding Gear.Name}" />
-                <DataGridTextColumn Header="Type" Binding="{Binding Gear.Type, Converter={StaticResource GearTypeConverter}}" />
+                <DataGridTextColumn Header="Nom" Binding="{Binding Borrowing.Gear.Name}" />
+                <DataGridTextColumn Header="Type" Binding="{Binding Borrowing.Gear.Type, Converter={StaticResource GearTypeConverter}}" />
+                <DataGridTextColumn Header="Remarque" Binding="{Binding Comment}" />
             </DataGrid.Columns>
         </DataGrid>
         

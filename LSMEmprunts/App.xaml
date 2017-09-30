@@ -27,6 +27,7 @@
         <local:GearHistoryDlg x:Key="{x:Type local:GearHistoryDlgViewModel}" x:Shared="false" />
         <local:UserHistoryDlg x:Key="{x:Type local:UserHistoryDlgViewModel}" x:Shared="false" />
         <local:PasswordDlg x:Key="{x:Type local:PasswordDlgViewModel}" x:Shared="false" />
+        <local:WarningWindow x:Key="{x:Type local:WarningWindowViewModel}" x:Shared="false" />
 
         <!--Converters-->
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />

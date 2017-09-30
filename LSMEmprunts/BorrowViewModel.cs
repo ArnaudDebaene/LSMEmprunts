@@ -76,6 +76,8 @@ namespace LSMEmprunts
             }
         }
 
+        private List<Borrowing> _BorrowingsToForceClose = new List<Borrowing>();
+
         public ObservableCollection<Gear> BorrowedGears { get; } = new ObservableCollection<Gear>();
 
         private string _Comment;
@@ -110,6 +112,22 @@ namespace LSMEmprunts
 
                 if (matchingGear != null)
                 {
+                    //check for double input of a given gear
+                    if (BorrowedGears.Contains(matchingGear))
+                    {
+                        var vm = new WarningWindowViewModel("Matériel déjà emprunté");
+                        MainWindowViewModel.Instance.Dialogs.Add(vm);
+                        SetProperty(ref _SelectedGearId, string.Empty);
+                        return;
+                    }
+
+                    //try to find a still open borrowing of the same gear - force close it if found
+                    var existingBorrowing = _Context.Borrowings.FirstOrDefault(e => e.GearId == matchingGear.Id && e.State == BorrowingState.Open);
+                    if (existingBorrowing != null)
+                    {
+                        _BorrowingsToForceClose.Add(existingBorrowing);
+                    }
+
                     BorrowedGears.Add(matchingGear);
                     SetProperty(ref _SelectedGearId, string.Empty);
                     ValidateCommand.RaiseCanExecuteChanged();
@@ -127,6 +145,13 @@ namespace LSMEmprunts
         private async void ValidateCmd()
         {
             var date = DateTime.Now;
+
+            foreach(var existingBorrowing in _BorrowingsToForceClose)
+            {
+                existingBorrowing.State = BorrowingState.ForcedClose;
+                existingBorrowing.Comment = existingBorrowing.Comment ?? string.Empty + " Clos de force car matériel réemprunté";
+                existingBorrowing.ReturnTime = date;
+            }
 
             await _Context.Borrowings.AddRangeAsync(BorrowedGears.Select(e =>
             new Borrowing
