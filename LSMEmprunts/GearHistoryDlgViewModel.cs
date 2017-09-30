@@ -5,6 +5,7 @@ using MvvmDialogs.ViewModels;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace LSMEmprunts
 {
@@ -28,7 +29,9 @@ namespace LSMEmprunts
             _Context = context;
             _Gear = gear;
 
-            Title = "Historique d'emprunt " + gear.Type + " " + gear.Name;
+            var converter = new GearTypeToStringConverter();
+
+            Title = "Historique d'emprunt " + converter.Convert(gear.Type, typeof(string), null, null) + " " + gear.Name;
 
             Borrowings = new ObservableCollection<Borrowing>(context.Borrowings.Include(e => e.User)
                 .Where(e => e.Gear == gear).OrderByDescending(e => e.BorrowTime));

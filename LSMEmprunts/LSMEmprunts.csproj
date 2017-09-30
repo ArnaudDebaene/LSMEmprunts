@@ -142,6 +142,7 @@
     </Compile>
     <Compile Include="GearHistoryDlgViewModel.cs" />
     <Compile Include="GearProxy.cs" />
+    <Compile Include="GearTypeToStringConverter.cs" />
     <Compile Include="Memento.cs" />
     <Compile Include="Migrations\20170919194005_InitialMigration.cs" />
     <Compile Include="Migrations\20170919194005_InitialMigration.designer.cs">

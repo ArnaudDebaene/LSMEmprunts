@@ -34,7 +34,7 @@
                   AutoGenerateColumns="False" ItemsSource="{Binding ClosingBorrowings}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Nom" Binding="{Binding Gear.Name}" />
-                <DataGridTextColumn Header="Type" Binding="{Binding Gear.Type}" />
+                <DataGridTextColumn Header="Type" Binding="{Binding Gear.Type, Converter={StaticResource GearTypeConverter}}" />
             </DataGrid.Columns>
         </DataGrid>
         

@@ -31,6 +31,7 @@
         <!--Converters-->
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:BoolToInvertConverter x:Key="BoolToInvertConverter" />
+        <local:GearTypeToStringConverter x:Key="GearTypeConverter" />
 
         <!--Icons-->
         <DrawingBrush x:Key="ReturnIcon" Stretch="Uniform" >

@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="LSMEmprunts.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LSMEmprunts"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:SettingsViewModel}"
@@ -89,7 +89,9 @@
                     <ControlTemplate />
                 </DataGrid.RowValidationErrorTemplate>
                 <DataGrid.Columns>
-                    <DataGridComboBoxColumn Header="Type" SelectedItemBinding="{Binding Type}" ItemsSource="{Binding Source={StaticResource GearTypeEnum}}" />
+                    <DataGridComboBoxColumn Header="Type" 
+                                            SelectedItemBinding="{Binding Type, Converter={StaticResource GearTypeConverter}}" 
+                                            ItemsSource="{Binding Source={StaticResource GearTypeEnum}, Converter={StaticResource GearTypeConverter}}" />
                     <DataGridTextColumn Header="Nom" EditingElementStyle="{StaticResource ErrorStyle}"
                                         Binding="{Binding Name, ValidatesOnNotifyDataErrors=True, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
                     <DataGridTextColumn Header="Code Barre" EditingElementStyle="{StaticResource ErrorStyle}"

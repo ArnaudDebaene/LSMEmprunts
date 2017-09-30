@@ -67,7 +67,7 @@
             <DataGrid Grid.Row="4" ItemsSource="{Binding BorrowedGears}" Margin="0 5"
                       AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Type}" Header="Type"/>
+                    <DataGridTextColumn Binding="{Binding Type, Converter={StaticResource GearTypeConverter}}" Header="Type"/>
                     <DataGridTextColumn Binding="{Binding Name}" Header="Nom"/>
                 </DataGrid.Columns>
             </DataGrid>
