@@ -8,11 +8,14 @@
              d:DataContext="{d:DesignInstance Type=local:HomeViewModel}">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <Grid>
+        <TextBlock HorizontalAlignment="Center" FontSize="48" Margin="10">LSM - Emprunt Matériel</TextBlock>
+
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto"/>
@@ -38,18 +41,26 @@
                 </Button>
             </UniformGrid>
 
-            <DataGrid Grid.Column="2" Margin="10" IsReadOnly="True"
+            <Grid Grid.Column="2" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock FontSize="36" HorizontalAlignment="Center" Margin="5">Emprunts en cours</TextBlock>
+            <DataGrid Grid.Row="1" IsReadOnly="True"
                       ItemsSource="{Binding ActiveBorrowings}"
                       AutoGenerateColumns="False" CanUserReorderColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding User.Name}" Header="Emprunteur"/>
+                    <DataGridTextColumn Binding="{Binding Gear.Type, Converter={StaticResource GearTypeConverter}}" Header="Type"/>
                     <DataGridTextColumn Binding="{Binding Gear.Name}" Header="Matériel"/>
                     <DataGridTextColumn Binding="{Binding BorrowTime}" Header="Date"/>
                 </DataGrid.Columns>
             </DataGrid>
+            </Grid>
         </Grid>
 
-        <Button Grid.Row="1" HorizontalAlignment="Left" Command="{Binding SettingsCommand}" Margin="5">
+        <Button Grid.Row="2" HorizontalAlignment="Left" Command="{Binding SettingsCommand}" Margin="5">
             <Rectangle Width="70" Height="70" Margin="5" Fill="{StaticResource SettingsIcon}"/>
         </Button>
     </Grid>
