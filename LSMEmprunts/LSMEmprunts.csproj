@@ -138,6 +138,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CountDownTicker.cs" />
     <Compile Include="GearHistoryDlg.xaml.cs">
       <DependentUpon>GearHistoryDlg.xaml</DependentUpon>
     </Compile>

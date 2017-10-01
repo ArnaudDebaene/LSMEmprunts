@@ -56,7 +56,7 @@ namespace LSMEmprunts
                 if (matchingGear != null)
                 {
                     //check for double input of a given gear
-                    if (ClosingBorrowings.Any(e=>e.Borrowing.Gear==matchingGear))
+                    if (ClosingBorrowings.Any(e => e.Borrowing.Gear == matchingGear))
                     {
                         var vm = new WarningWindowViewModel("Matériel déjà rendu");
                         MainWindowViewModel.Instance.Dialogs.Add(vm);
@@ -69,7 +69,7 @@ namespace LSMEmprunts
                     var matchingBorrowing = _Context.Borrowings
                         .FirstOrDefault(e => e.Gear == matchingGear && e.State == BorrowingState.Open);
 
-                    if (matchingBorrowing!=null)
+                    if (matchingBorrowing != null)
                     {
                         matchingBorrowing.ReturnTime = now;
                         matchingBorrowing.State = BorrowingState.GearReturned;
@@ -87,7 +87,18 @@ namespace LSMEmprunts
                             Comment = "Retourné sans avoir été emprunté",
                         };
                         _Context.Borrowings.Add(borrowing);
-                        ClosingBorrowings.Add(new ReturnInfo { Borrowing = borrowing, Comment="Retourné sans avoir été emprunté" });
+                        ClosingBorrowings.Add(new ReturnInfo { Borrowing = borrowing, Comment = "Retourné sans avoir été emprunté" });
+                    }
+
+                    if (AutoValidateTicker == null)
+                    {
+                        AutoValidateTicker = new CountDownTicker(20);
+                        AutoValidateTicker.Tick += () =>
+                          {
+                              
+                              if (CanValidateCmd())
+                                  ValidateCmd();
+                          };
                     }
 
                     SetProperty(ref _SelectedGearId, string.Empty);
@@ -105,12 +116,19 @@ namespace LSMEmprunts
             _Context.SaveChanges();
             GoBackToHomeView();
         }
-        private bool CanValidateCmd() => ClosingBorrowings.Any();        
+        private bool CanValidateCmd() => ClosingBorrowings.Any();
 
         public DelegateCommand CancelCommand { get; }
         private void GoBackToHomeView()
         {
             MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
+        }
+
+        private CountDownTicker _AutoValidatTicker;
+        public CountDownTicker AutoValidateTicker
+        {
+            get => _AutoValidatTicker;
+            set => SetProperty(ref _AutoValidatTicker, value);
         }
     }
 }

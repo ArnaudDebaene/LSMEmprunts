@@ -75,7 +75,9 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right">
             <Button HorizontalAlignment="Center" Command="{Binding ValidateCommand}" Margin="5">
-                <Rectangle Width="70" Height="70" Margin="5" Fill="{StaticResource CheckIcon}"/>
+                <Grid Width="70" Height="70" Margin="5" Background="{StaticResource CheckIcon}">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding AutoValidateTicker.RemainingTime}" />
+                </Grid>
             </Button>
             <Button HorizontalAlignment="Center" Command="{Binding CancelCommand}" Margin="5">
                 <Rectangle Width="70" Height="70" Margin="5" Fill="{StaticResource CancelIcon}"/>

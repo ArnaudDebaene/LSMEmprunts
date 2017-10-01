@@ -131,13 +131,27 @@ namespace LSMEmprunts
                     BorrowedGears.Add(matchingGear);
                     SetProperty(ref _SelectedGearId, string.Empty);
                     ValidateCommand.RaiseCanExecuteChanged();
+
+                    //start auto close ticker if required
+                    if (AutoValidateTicker==null)
+                    {
+                        AutoValidateTicker = new CountDownTicker(20);
+                        AutoValidateTicker.Tick += () =>
+                        {
+                            if (CanValidateCmd())
+                                ValidateCmd();
+                        };
+                    }
+                    else
+                    {
+                        AutoValidateTicker.Reset();
+                    }
                 }
                 else
                 {
                     //if the gear was not found, simply update the typed value
                     SetProperty(ref _SelectedGearId, value);
                 }
-
             }
         }
 
@@ -176,6 +190,12 @@ namespace LSMEmprunts
         {
             MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
         }
-        
+
+        private CountDownTicker _AutoValidatTicker;
+        public CountDownTicker AutoValidateTicker
+        {
+            get => _AutoValidatTicker;
+            set => SetProperty(ref _AutoValidatTicker, value);
+        }
     }
 }
