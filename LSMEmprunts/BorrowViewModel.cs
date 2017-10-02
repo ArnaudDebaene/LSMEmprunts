@@ -32,6 +32,7 @@ namespace LSMEmprunts
                     _SelectedUserText = null;
                     OnPropertyChanged(nameof(SelectedUserText));
                     Users.Refresh();
+                    GearInputFocused = true; //move focus to gear input.
                 }
             }
         }
@@ -211,6 +212,20 @@ namespace LSMEmprunts
         {
             get => _AutoValidatTicker;
             set => SetProperty(ref _AutoValidatTicker, value);
+        }
+
+        private bool _UserInputFocused = true;
+        public bool UserInputFocused
+        {
+            get => _UserInputFocused;
+            set => SetProperty(ref _UserInputFocused, value);
+        }
+
+        private bool _GearInputFocused;
+        public bool GearInputFocused
+        {
+            get => _GearInputFocused;
+            set => SetProperty(ref _GearInputFocused, value);
         }
     }
 }

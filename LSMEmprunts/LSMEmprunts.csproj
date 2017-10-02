@@ -169,6 +169,7 @@
       <DependentUpon>ReturnView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReturnViewModel.cs" />
+    <Compile Include="SetFocusBehavior.cs" />
     <Compile Include="SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>

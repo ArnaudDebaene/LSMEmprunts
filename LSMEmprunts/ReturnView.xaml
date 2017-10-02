@@ -6,7 +6,7 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:LSMEmprunts"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:ReturnViewModel}"
-             d:DesignHeight="600" d:DesignWidth="600" FocusManager.FocusedElement="{Binding ElementName=GearTextBox}">
+             d:DesignHeight="600" d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -23,9 +23,10 @@
 
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical" Margin="5">
             <TextBlock>Scannez le matériel ou saisissez son nom</TextBlock>
-            <TextBox x:Name="GearTextBox" Text="{Binding SelectedGearId}">
+            <TextBox Text="{Binding SelectedGearId}">
                 <i:Interaction.Behaviors>
                     <local:BindOnEnterBehavior />
+                    <local:SetFocusBehavior IsFocused="True" />
                 </i:Interaction.Behaviors>
             </TextBox>
         </StackPanel>
