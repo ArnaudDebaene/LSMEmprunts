@@ -150,6 +150,10 @@
     <Compile Include="Migrations\20170919194005_InitialMigration.designer.cs">
       <DependentUpon>20170919194005_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20171002074206_AddUserPhone.cs" />
+    <Compile Include="Migrations\20171002074206_AddUserPhone.designer.cs">
+      <DependentUpon>20171002074206_AddUserPhone.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\ContextModelSnapshot.cs" />
     <Compile Include="MvvmDialogs\Behaviors\DialogBehavior.cs" />
     <Compile Include="MvvmDialogs\Presenters\IDialogBoxPresenter.cs" />

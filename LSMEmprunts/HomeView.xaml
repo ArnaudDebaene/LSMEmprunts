@@ -52,6 +52,7 @@
                       AutoGenerateColumns="False" CanUserReorderColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding User.Name}" Header="Emprunteur"/>
+                    <DataGridTextColumn Binding="{Binding User.Phone}" Header="Téléphone"/>
                     <DataGridTextColumn Binding="{Binding Gear.Type, Converter={StaticResource GearTypeConverter}}" Header="Type"/>
                     <DataGridTextColumn Binding="{Binding Gear.Name}" Header="Matériel"/>
                     <DataGridTextColumn Binding="{Binding BorrowTime}" Header="Date"/>

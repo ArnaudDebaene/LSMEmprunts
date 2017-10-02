@@ -61,5 +61,11 @@ namespace LSMEmprunts
                 AddError(nameof(LicenceScanId), "le code licence doit être unique");
             }
         }
+
+        public string Phone
+        {
+            get => WrappedElt.Phone;
+            set => SetProperty(e => e.Phone, value);
+        }
     }
 }

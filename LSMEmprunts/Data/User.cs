@@ -12,6 +12,8 @@ namespace LSMEmprunts.Data
 
         public string LicenceScanId { get; set; }
 
+        public string Phone { get; set; }
+
         public ICollection<Borrowing> Borrowings { get; set; }
     }
 

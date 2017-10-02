@@ -11,9 +11,10 @@ using System;
 namespace LSMEmprunts.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20171002074206_AddUserPhone")]
+    partial class AddUserPhone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,6 +34,7 @@ namespace LSMEmprunts.Migrations
                     b.Property<DateTime?>("ReturnTime");
 
                     b.Property<int>("State")
+                        .ValueGeneratedOnAdd()
                         .HasDefaultValue(0);
 
                     b.Property<int?>("UserId");
