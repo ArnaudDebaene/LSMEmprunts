@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:LSMEmprunts"
              xmlns:data="clr-namespace:LSMEmprunts.Data"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:HomeViewModel}" 
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:BorrowViewModel}" 
              d:DesignHeight="600" d:DesignWidth="600" FocusManager.FocusedElement="{Binding ElementName=UserTextBox}">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -21,31 +21,37 @@
 
         <Grid Grid.Row="0" Margin="5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <ListView Grid.Row="0" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" Margin="0,-1,0,1">
+            <TextBlock Grid.Row="0">Scannez votre licence ou saisissez votre nom</TextBlock>
+            <TextBox x:Name="UserTextBox" Grid.Row="1"
+                     Text="{Binding Path=SelectedUserText, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Behaviors>
+                    <local:BindOnEnterBehavior/>
+                </i:Interaction.Behaviors>
+            </TextBox>
+
+            <ListView Grid.Row="2" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" Margin="0,-1,0,1">
                 <ListView.ItemTemplate>
                     <DataTemplate DataType="{x:Type data:User}">
                         <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-            <TextBlock Grid.Row="1">Scannez votre licence ou saisissez votre nom</TextBlock>
-            <TextBox x:Name="UserTextBox" Grid.Row="2"
-                     Text="{Binding Path=SelectedUserText, UpdateSourceTrigger=PropertyChanged}">
-                <i:Interaction.Behaviors>
-                    <local:BindOnEnterBehavior/>
-                </i:Interaction.Behaviors>
-            </TextBox>
+            
+            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                <TextBlock>Utilisateur : </TextBlock>
+                <TextBlock FontWeight="Bold" Text="{Binding SelectedUser.Name}" />
+            </StackPanel>
         </Grid>
 
-        <Rectangle Grid.Column="1" Width="5" Fill="Black" />
+        <Rectangle Grid.Row="0" Grid.Column="1" Width="5" Fill="Black" />
 
-        <Grid Grid.Column="2" Margin="5">
+        <Grid Grid.Row="0" Grid.Column="2" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>

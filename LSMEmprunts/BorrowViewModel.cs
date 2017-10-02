@@ -4,7 +4,9 @@ using Mvvm.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 
 namespace LSMEmprunts
 {
@@ -12,7 +14,9 @@ namespace LSMEmprunts
     {
         private readonly Context _Context;
 
-        public List<User> Users { get; }
+        private readonly List<User> _UsersList;
+
+        public ICollectionView Users { get; }
 
         private User _SelectedUser;
         public User SelectedUser
@@ -20,11 +24,15 @@ namespace LSMEmprunts
             get => _SelectedUser;
             set
             {
-                SetProperty(ref _SelectedUser, value);
-
-                _SelectedUserText = value.Name;
-                OnPropertyChanged(nameof(SelectedUserText));
+                bool wasChanged = SetProperty(ref _SelectedUser, value);
                 ValidateCommand.RaiseCanExecuteChanged();
+
+                if (wasChanged && value != null)
+                {
+                    _SelectedUserText = null;
+                    OnPropertyChanged(nameof(SelectedUserText));
+                    Users.Refresh();
+                }
             }
         }
 
@@ -35,7 +43,19 @@ namespace LSMEmprunts
             ValidateCommand = new DelegateCommand(ValidateCmd, CanValidateCmd);
             CancelCommand = new DelegateCommand(GoBackToHomeView);
 
-            Users = _Context.Users.ToList();
+            _UsersList = _Context.Users.ToList();
+            Users = CollectionViewSource.GetDefaultView(_UsersList);
+            Users.Filter = (item) =>
+            {
+                if (string.IsNullOrEmpty(_SelectedUserText))
+                {
+                    return true;
+                }
+                else
+                {
+                    return ((User)item).Name.StartsWith(_SelectedUserText, StringComparison.CurrentCultureIgnoreCase);
+                }
+            };
         }
 
         public void Dispose()
@@ -46,22 +66,20 @@ namespace LSMEmprunts
         private string _SelectedUserText;
         public string SelectedUserText
         {
-            get
-            {
-                return _SelectedUserText;
-            }
+            get => _SelectedUserText;
             set
             {
-                var lowerValue = value.ToLowerInvariant();
-                var matchingUsersByName = Users.Where(e => e.Name.ToLowerInvariant().StartsWith(lowerValue)).ToList();
-                if (matchingUsersByName.Count == 1)
+                _SelectedUserText = value;
+                Users.Refresh();
+
+                if (Users.Cast<User>().Count() == 1)
                 {
                     System.Diagnostics.Debug.WriteLine("User input - found matching user by name");
-                    SelectedUser = matchingUsersByName[0];
+                    SelectedUser = Users.Cast<User>().First();
                     return;
                 }
 
-                var matchingUserByLicence = Users.FirstOrDefault(e => e.LicenceScanId == value);
+                var matchingUserByLicence = _UsersList.FirstOrDefault(e => e.LicenceScanId == value);
                 if (matchingUserByLicence != null)
                 {
                     System.Diagnostics.Debug.WriteLine("User input - found matching user by licence");
@@ -69,14 +87,11 @@ namespace LSMEmprunts
                     return;
                 }
 
-                //if we were not able to find any matching user, just remember what is currently typed
-                SetProperty(ref _SelectedUserText, value);
-                _SelectedUser = null;
-                OnPropertyChanged(nameof(SelectedUser));
+                OnPropertyChanged();
             }
         }
 
-        private List<Borrowing> _BorrowingsToForceClose = new List<Borrowing>();
+        private readonly List<Borrowing> _BorrowingsToForceClose = new List<Borrowing>();
 
         public ObservableCollection<Gear> BorrowedGears { get; } = new ObservableCollection<Gear>();
 
