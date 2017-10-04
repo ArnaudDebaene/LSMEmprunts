@@ -29,6 +29,7 @@ namespace LSMEmprunts
 
         public void Dispose()
         {
+            AutoValidateTicker?.Dispose();
             _Context?.Dispose();
         }
 
@@ -77,6 +78,9 @@ namespace LSMEmprunts
                     }
                     else
                     {
+                        var msgVm = new WarningWindowViewModel("Matériel retourné sans avoir été emprunté");
+                        MainWindowViewModel.Instance.Dialogs.Add(msgVm);
+
                         //create a "fake" borrowing with same Borrow / Return date
                         var borrowing = new Borrowing
                         {
@@ -100,6 +104,10 @@ namespace LSMEmprunts
                                   ValidateCmd();
                           };
                     }
+                    else
+                    {
+                        AutoValidateTicker.Reset();
+                    }
 
                     SetProperty(ref _SelectedGearId, string.Empty);
                 }
@@ -113,6 +121,8 @@ namespace LSMEmprunts
         public DelegateCommand ValidateCommand { get; }
         private void ValidateCmd()
         {
+            _AutoValidateTicker?.Dispose();
+
             _Context.SaveChanges();
             GoBackToHomeView();
         }
@@ -124,11 +134,11 @@ namespace LSMEmprunts
             MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
         }
 
-        private CountDownTicker _AutoValidatTicker;
+        private CountDownTicker _AutoValidateTicker;
         public CountDownTicker AutoValidateTicker
         {
-            get => _AutoValidatTicker;
-            set => SetProperty(ref _AutoValidatTicker, value);
+            get => _AutoValidateTicker;
+            set => SetProperty(ref _AutoValidateTicker, value);
         }
     }
 }

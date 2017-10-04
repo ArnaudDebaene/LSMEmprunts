@@ -28,11 +28,13 @@
         <local:UserHistoryDlg x:Key="{x:Type local:UserHistoryDlgViewModel}" x:Shared="false" />
         <local:PasswordDlg x:Key="{x:Type local:PasswordDlgViewModel}" x:Shared="false" />
         <local:WarningWindow x:Key="{x:Type local:WarningWindowViewModel}" x:Shared="false" />
+        <local:ConfirmWindow x:Key="{x:Type local:ConfirmWindowViewModel}" x:Shared="False" />
 
         <!--Converters-->
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:BoolToInvertConverter x:Key="BoolToInvertConverter" />
         <local:GearTypeToStringConverter x:Key="GearTypeConverter" />
+        <local:BorrowStateToStringConverter x:Key="BorrowStateConverter"/>
 
         <!--Icons-->
         <DrawingBrush x:Key="ReturnIcon" Stretch="Uniform" >

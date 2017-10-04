@@ -138,6 +138,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BorrowStateToStringConverter.cs" />
+    <Compile Include="ConfirmWindow.xaml.cs">
+      <DependentUpon>ConfirmWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ConfirmWindowViewModel.cs" />
     <Compile Include="CountDownTicker.cs" />
     <Compile Include="GearHistoryDlg.xaml.cs">
       <DependentUpon>GearHistoryDlg.xaml</DependentUpon>
@@ -184,6 +189,10 @@
     </Compile>
     <Compile Include="WarningWindowViewModel.cs" />
     <Page Include="BorrowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ConfirmWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

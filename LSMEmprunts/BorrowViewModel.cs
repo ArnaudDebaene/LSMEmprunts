@@ -6,11 +6,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 
 namespace LSMEmprunts
 {
-    public class BorrowViewModel : BindableBase
+    public class BorrowViewModel : BindableBase, IDisposable
     {
         private readonly Context _Context;
 
@@ -61,6 +62,7 @@ namespace LSMEmprunts
 
         public void Dispose()
         {
+            AutoValidateTicker?.Dispose();
             _Context.Dispose();
         }
 
@@ -107,73 +109,84 @@ namespace LSMEmprunts
         public string SelectedGearId
         {
             get => _SelectedGearId;
-            set
+            set { Application.Current.Dispatcher.BeginInvoke(new Action(() => SetSelectedGearId(value))); }
+        }
+
+        private async void SetSelectedGearId(string value)
+        {
+            var valueLower = value.ToLowerInvariant();
+            var matchingGear = _Context.Gears.FirstOrDefault(e => e.Name.ToLowerInvariant() == valueLower);
+
+
+            if (matchingGear != null)
             {
-                var valueLower = value.ToLowerInvariant();
-                var matchingGear = _Context.Gears.FirstOrDefault(e => e.Name.ToLowerInvariant() == valueLower);
-
-
+                System.Diagnostics.Debug.WriteLine("Found matching gear by name");
+            }
+            else
+            {
+                matchingGear = _Context.Gears.FirstOrDefault(e => e.BarCode == value);
                 if (matchingGear != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("Found matching gear by name");
+                    System.Diagnostics.Debug.WriteLine("Found matching gear by scan");
                 }
-                else
+            }
+
+            if (matchingGear != null)
+            {
+                //check for double input of a given gear
+                if (BorrowedGears.Contains(matchingGear))
                 {
-                    matchingGear = _Context.Gears.FirstOrDefault(e => e.BarCode == value);
-                    if (matchingGear != null)
-                    {
-                        System.Diagnostics.Debug.WriteLine("Found matching gear by scan");
-                    }
+                    var vm = new WarningWindowViewModel("Matériel déjà emprunté");
+                    MainWindowViewModel.Instance.Dialogs.Add(vm);
+                    SetProperty(ref _SelectedGearId, string.Empty);
+                    return;
                 }
 
-                if (matchingGear != null)
+                //try to find a still open borrowing of the same gear - force close it if found
+                var existingBorrowing = _Context.Borrowings.FirstOrDefault(e => e.GearId == matchingGear.Id && e.State == BorrowingState.Open);
+                if (existingBorrowing != null)
                 {
-                    //check for double input of a given gear
-                    if (BorrowedGears.Contains(matchingGear))
+                    var confirmDlg = new ConfirmWindowViewModel("Ce matériel est déjà noté comme emprunté. Etes vous sûr(e)?");
+                    MainWindowViewModel.Instance.Dialogs.Add(confirmDlg);
+                    if (await confirmDlg.Result == false)
                     {
-                        var vm = new WarningWindowViewModel("Matériel déjà emprunté");
-                        MainWindowViewModel.Instance.Dialogs.Add(vm);
                         SetProperty(ref _SelectedGearId, string.Empty);
                         return;
                     }
+                    _BorrowingsToForceClose.Add(existingBorrowing);
+                }
 
-                    //try to find a still open borrowing of the same gear - force close it if found
-                    var existingBorrowing = _Context.Borrowings.FirstOrDefault(e => e.GearId == matchingGear.Id && e.State == BorrowingState.Open);
-                    if (existingBorrowing != null)
-                    {
-                        _BorrowingsToForceClose.Add(existingBorrowing);
-                    }
+                BorrowedGears.Add(matchingGear);
+                SetProperty(ref _SelectedGearId, string.Empty);
+                ValidateCommand.RaiseCanExecuteChanged();
 
-                    BorrowedGears.Add(matchingGear);
-                    SetProperty(ref _SelectedGearId, string.Empty);
-                    ValidateCommand.RaiseCanExecuteChanged();
-
-                    //start auto close ticker if required
-                    if (AutoValidateTicker==null)
+                //start auto close ticker if required
+                if (AutoValidateTicker == null)
+                {
+                    AutoValidateTicker = new CountDownTicker(20);
+                    AutoValidateTicker.Tick += () =>
                     {
-                        AutoValidateTicker = new CountDownTicker(20);
-                        AutoValidateTicker.Tick += () =>
-                        {
-                            if (CanValidateCmd())
-                                ValidateCmd();
-                        };
-                    }
-                    else
-                    {
-                        AutoValidateTicker.Reset();
-                    }
+                        if (CanValidateCmd())
+                            ValidateCmd();
+                    };
                 }
                 else
                 {
-                    //if the gear was not found, simply update the typed value
-                    SetProperty(ref _SelectedGearId, value);
+                    AutoValidateTicker.Reset();
                 }
+            }
+            else
+            {
+                //if the gear was not found, simply update the typed value
+                SetProperty(ref _SelectedGearId, value);
             }
         }
 
         public DelegateCommand ValidateCommand { get; }
         private async void ValidateCmd()
         {
+            AutoValidateTicker?.Dispose();
+
             var date = DateTime.Now;
 
             foreach(var existingBorrowing in _BorrowingsToForceClose)
@@ -207,11 +220,10 @@ namespace LSMEmprunts
             MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
         }
 
-        private CountDownTicker _AutoValidatTicker;
-        public CountDownTicker AutoValidateTicker
-        {
-            get => _AutoValidatTicker;
-            set => SetProperty(ref _AutoValidatTicker, value);
+        private CountDownTicker _AutoValidateTicker;
+        public CountDownTicker AutoValidateTicker{
+            get => _AutoValidateTicker;
+            set => SetProperty(ref _AutoValidateTicker, value);
         }
 
         private bool _UserInputFocused = true;

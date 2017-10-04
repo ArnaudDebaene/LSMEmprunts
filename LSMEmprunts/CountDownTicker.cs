@@ -4,12 +4,12 @@ using System.Windows.Threading;
 
 namespace LSMEmprunts
 {
-    public class CountDownTicker : BindableBase
+    public class CountDownTicker : BindableBase, IDisposable
     {
         public event Action Tick;
 
         private readonly int _InitialTime;
-        private DispatcherTimer _Timer;
+        private readonly DispatcherTimer _Timer;
 
         public CountDownTicker(int duration)
         {
@@ -17,13 +17,13 @@ namespace LSMEmprunts
             RemainingTime = duration;
             _Timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             _Timer.Tick += OnTimerTick;
-            _Timer.Start(); ;
+            _Timer.Start();
         }
 
         private void OnTimerTick(object sender, EventArgs e)
         {
             RemainingTime = RemainingTime - 1;
-            if (RemainingTime==0)
+            if (RemainingTime==0 && !_Disposed)
             {
                 Tick?.Invoke();
             }
@@ -41,5 +41,15 @@ namespace LSMEmprunts
             RemainingTime = _InitialTime;
         }
 
+        private bool _Disposed;
+
+        public void Dispose()
+        {
+            if (!_Disposed)
+            {
+                _Disposed = true;
+                _Timer.Stop();
+            }
+        }
     }
 }

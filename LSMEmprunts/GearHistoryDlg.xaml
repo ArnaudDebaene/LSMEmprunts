@@ -21,7 +21,7 @@
                 <DataGridTextColumn Header="Emprunteur" Binding="{Binding User.Name}" />
                 <DataGridTextColumn Header="Date d'emprunt" Binding="{Binding BorrowTime}" />
                 <DataGridTextColumn Header="Date de retour" Binding="{Binding ReturnTime}" />
-                <DataGridTextColumn Header="Etat" Binding="{Binding State}" />
+                <DataGridTextColumn Header="Etat" Binding="{Binding State, Converter={StaticResource BorrowStateConverter}}" />
                 <DataGridTextColumn Header="Commentaire" Binding="{Binding Comment}" />
             </DataGrid.Columns>
         </DataGrid>
