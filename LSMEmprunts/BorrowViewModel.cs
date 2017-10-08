@@ -146,7 +146,7 @@ namespace LSMEmprunts
                 var existingBorrowing = _Context.Borrowings.FirstOrDefault(e => e.GearId == matchingGear.Id && e.State == BorrowingState.Open);
                 if (existingBorrowing != null)
                 {
-                    var confirmDlg = new ConfirmWindowViewModel("Ce matériel est déjà noté comme emprunté. Etes vous sûr(e)?");
+                    var confirmDlg = new ConfirmWindowViewModel("Ce matériel est déjà noté comme emprunté. L'emprunt en cours sera fermé. Etes vous sûr(e)?");
                     MainWindowViewModel.Instance.Dialogs.Add(confirmDlg);
                     if (await confirmDlg.Result == false)
                     {

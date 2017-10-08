@@ -35,6 +35,7 @@
         <local:BoolToInvertConverter x:Key="BoolToInvertConverter" />
         <local:GearTypeToStringConverter x:Key="GearTypeConverter" />
         <local:BorrowStateToStringConverter x:Key="BorrowStateConverter"/>
+        <local:BoolToBoldConverter x:Key="BoolToBoldConverter"/>
 
         <!--Icons-->
         <DrawingBrush x:Key="ReturnIcon" Stretch="Uniform" >

@@ -71,7 +71,7 @@
         <Rectangle x:Name="rectangle" Width="90" Fill="{StaticResource WarningIcon}" />
         <Viewbox Grid.Column="1" StretchDirection="DownOnly" Stretch="Uniform">
             <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" 
-                   FontSize="24" TextTrimming="WordEllipsis" Margin="5,0" Text="{Binding Message}" />
+                   FontSize="26" TextTrimming="WordEllipsis" Margin="5,0" Text="{Binding Message}" />
         </Viewbox>
         <Rectangle x:Name="rectangle1" Grid.Column="2" Width="90" Fill="{StaticResource WarningIcon}" />
     </Grid>

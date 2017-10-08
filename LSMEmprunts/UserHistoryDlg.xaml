@@ -14,7 +14,7 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock HorizontalAlignment="Center" Text="{Binding Title}" FontSize="24" />
+        <TextBlock HorizontalAlignment="Center" Text="{Binding Title}" FontSize="26" />
 
         <DataGrid Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Borrowings}">
             <DataGrid.Columns>

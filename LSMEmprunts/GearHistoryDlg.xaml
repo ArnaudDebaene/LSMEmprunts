@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LSMEmprunts"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:GearHistoryDlgViewModel}"
-        Title="Historique matériel" Height="600" Width="800" FontSize="14" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
+        Title="Historique matériel" Height="600" Width="800" FontSize="22" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -14,7 +14,7 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock HorizontalAlignment="Center" Text="{Binding Title}" FontSize="24" />
+        <TextBlock HorizontalAlignment="Center" Text="{Binding Title}" FontSize="26" />
 
         <DataGrid Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Borrowings}">
             <DataGrid.Columns>

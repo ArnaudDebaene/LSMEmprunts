@@ -9,7 +9,7 @@
         Title="MainWindow" Height="768" Width="1024"
         DataContext="{x:Static local:MainWindowViewModel.Instance}"
         dlgs:DialogBehavior.DialogViewModels="{Binding Dialogs}"
-        FontSize="18.667" WindowState="Maximized">
+        FontSize="22" WindowState="Maximized">
 
         
     <ContentControl Content="{Binding CurrentPageViewModel}" />

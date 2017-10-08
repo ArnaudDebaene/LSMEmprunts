@@ -36,13 +36,13 @@
                 </i:Interaction.Behaviors>
             </TextBox>
 
-            <ListView Grid.Row="2" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" Margin="0,-1,0,1">
-                <ListView.ItemTemplate>
+            <ListBox Grid.Row="2" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}">
+                <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type data:User}">
                         <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </ListBox.ItemTemplate>
+            </ListBox>
             
             <StackPanel Grid.Row="3" Orientation="Horizontal">
                 <TextBlock>Utilisateur : </TextBlock>
