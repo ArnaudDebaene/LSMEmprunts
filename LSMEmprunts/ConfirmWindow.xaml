@@ -11,7 +11,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Message}"/>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Message}" TextWrapping="Wrap"/>
         
         <UniformGrid Grid.Row="1" Columns="2" Margin="5">
             <Button Command="{Binding ConfirmCommand}" HorizontalAlignment="Center" VerticalAlignment="Center">

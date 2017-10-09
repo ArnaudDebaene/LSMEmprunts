@@ -37,7 +37,7 @@
             </TextBox>
             <ListBox Grid.Row="2" ItemsSource="{Binding Gears}" Margin="0,10,0,5" HorizontalContentAlignment="Stretch" >
                 <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type local:GearInfo}">
+                    <DataTemplate DataType="{x:Type local:GearReturnInfo}">
                         <Grid>
                             <TextBlock Text="{Binding Name}" FontWeight="{Binding Borrowed, Converter={StaticResource BoolToBoldConverter}}"/>
                             <UIElement.InputBindings>

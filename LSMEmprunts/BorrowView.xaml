@@ -13,6 +13,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -49,30 +51,56 @@
                 <TextBlock FontWeight="Bold" Text="{Binding SelectedUser.Name}" />
             </StackPanel>
         </Grid>
+        
+        
 
         <Rectangle Grid.Row="0" Grid.Column="1" Width="5" Fill="Black" />
 
         <Grid Grid.Row="0" Grid.Column="2" Margin="5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0">Scannez la matériel ou saisissez son nom</TextBlock>
+            <TextBlock Grid.Row="0">Scannez la matériel ou double cliquez dans la liste</TextBlock>
             <TextBox x:Name="GearTextBox" Grid.Row="1" Text="{Binding SelectedGearId}">
                 <i:Interaction.Behaviors>
                     <local:BindOnEnterBehavior/>
                     <local:SetFocusBehavior IsFocused="{Binding GearInputFocused}" />
                 </i:Interaction.Behaviors>
             </TextBox>
+            
+            <ListBox Grid.Row="2" Margin="0,5,0,5" HorizontalContentAlignment="Stretch" ItemsSource="{Binding Gears}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type local:GearBorrowInfo}">
+                        <Grid>
+                            <TextBlock Text="{Binding Name}" FontWeight="{Binding Available, Converter={StaticResource BoolToBoldConverter}}"/>
+                            <UIElement.InputBindings>
+                                <MouseBinding Gesture="LeftDoubleClick" 
+                                              Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.SelectGearCommand}"
+                                              CommandParameter="{Binding }"/>
+                            </UIElement.InputBindings>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                
+            </ListBox>
 
-            <TextBlock Grid.Row="2">Commentaire</TextBlock>
-            <TextBox Grid.Row="3" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Comment}"/>
+        </Grid>
 
-            <DataGrid Grid.Row="4" ItemsSource="{Binding BorrowedGears}" Margin="0 5"
+        <Rectangle Grid.Row="0" Grid.Column="3" Width="5" Fill="Black" />
+
+        <Grid Grid.Row="0" Grid.Column="4" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0">Commentaire</TextBlock>
+            <TextBox Grid.Row="1" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Comment}"/>
+
+            <DataGrid Grid.Row="2" ItemsSource="{Binding BorrowedGears}" Margin="0 5"
                       AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Type, Converter={StaticResource GearTypeConverter}}" Header="Type"/>
@@ -81,7 +109,7 @@
             </DataGrid>
         </Grid>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right">
             <Button HorizontalAlignment="Center" Command="{Binding ValidateCommand}" Margin="5">
                 <Grid Width="70" Height="70" Margin="5" Background="{StaticResource CheckIcon}">
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding AutoValidateTicker.RemainingTime}" />

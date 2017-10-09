@@ -6,11 +6,27 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
 namespace LSMEmprunts
 {
+    public class GearBorrowInfo
+    {
+        public Gear Gear { get; set; }
+        public bool Available { get; set; }
+
+        public string Name
+        {
+            get
+            {
+                var converter = new GearTypeToStringConverter();
+                return converter.Convert(Gear.Type, typeof(string), null, null) + " " + Gear.Name;
+            }
+        }
+    }
+
     public class BorrowViewModel : BindableBase, IDisposable
     {
         private readonly Context _Context;
@@ -18,6 +34,7 @@ namespace LSMEmprunts
         private readonly List<User> _UsersList;
 
         public ICollectionView Users { get; }
+        public ICollectionView Gears { get; }
 
         private User _SelectedUser;
         public User SelectedUser
@@ -25,7 +42,7 @@ namespace LSMEmprunts
             get => _SelectedUser;
             set
             {
-                bool wasChanged = SetProperty(ref _SelectedUser, value);
+                var wasChanged = SetProperty(ref _SelectedUser, value);
                 ValidateCommand.RaiseCanExecuteChanged();
 
                 if (wasChanged && value != null)
@@ -34,6 +51,7 @@ namespace LSMEmprunts
                     OnPropertyChanged(nameof(SelectedUserText));
                     Users.Refresh();
                     GearInputFocused = true; //move focus to gear input.
+                    StartOrResetValidateTicker();
                 }
             }
         }
@@ -44,6 +62,7 @@ namespace LSMEmprunts
 
             ValidateCommand = new DelegateCommand(ValidateCmd, CanValidateCmd);
             CancelCommand = new DelegateCommand(GoBackToHomeView);
+            SelectGearCommand = new DelegateCommand<GearBorrowInfo>(SelectGearCmd);
 
             _UsersList = _Context.Users.ToList();
             Users = CollectionViewSource.GetDefaultView(_UsersList);
@@ -53,10 +72,22 @@ namespace LSMEmprunts
                 {
                     return true;
                 }
-                else
+                return ((User)item).Name.StartsWith(_SelectedUserText, StringComparison.CurrentCultureIgnoreCase);
+            };
+
+            var gears = (from gear in _Context.Gears
+                    let borrowed = gear.Borrowings.Any(e => e.State == BorrowingState.Open)
+                    select new GearBorrowInfo { Gear = gear, Available = !borrowed }).OrderByDescending(e => e.Available)
+                .ToList();
+            Gears = CollectionViewSource.GetDefaultView(gears);
+            Gears.Filter = (item) =>
+            {
+                var gearInfo = (GearBorrowInfo) item;
+                if (BorrowedGears.Any(e => e == gearInfo.Gear))
                 {
-                    return ((User)item).Name.StartsWith(_SelectedUserText, StringComparison.CurrentCultureIgnoreCase);
+                    return false;
                 }
+                return true;
             };
         }
 
@@ -133,47 +164,7 @@ namespace LSMEmprunts
 
             if (matchingGear != null)
             {
-                //check for double input of a given gear
-                if (BorrowedGears.Contains(matchingGear))
-                {
-                    var vm = new WarningWindowViewModel("Matériel déjà emprunté");
-                    MainWindowViewModel.Instance.Dialogs.Add(vm);
-                    SetProperty(ref _SelectedGearId, string.Empty);
-                    return;
-                }
-
-                //try to find a still open borrowing of the same gear - force close it if found
-                var existingBorrowing = _Context.Borrowings.FirstOrDefault(e => e.GearId == matchingGear.Id && e.State == BorrowingState.Open);
-                if (existingBorrowing != null)
-                {
-                    var confirmDlg = new ConfirmWindowViewModel("Ce matériel est déjà noté comme emprunté. L'emprunt en cours sera fermé. Etes vous sûr(e)?");
-                    MainWindowViewModel.Instance.Dialogs.Add(confirmDlg);
-                    if (await confirmDlg.Result == false)
-                    {
-                        SetProperty(ref _SelectedGearId, string.Empty);
-                        return;
-                    }
-                    _BorrowingsToForceClose.Add(existingBorrowing);
-                }
-
-                BorrowedGears.Add(matchingGear);
-                SetProperty(ref _SelectedGearId, string.Empty);
-                ValidateCommand.RaiseCanExecuteChanged();
-
-                //start auto close ticker if required
-                if (AutoValidateTicker == null)
-                {
-                    AutoValidateTicker = new CountDownTicker(20);
-                    AutoValidateTicker.Tick += () =>
-                    {
-                        if (CanValidateCmd())
-                            ValidateCmd();
-                    };
-                }
-                else
-                {
-                    AutoValidateTicker.Reset();
-                }
+                await SelectGearToBorrow(matchingGear);
             }
             else
             {
@@ -226,6 +217,23 @@ namespace LSMEmprunts
             set => SetProperty(ref _AutoValidateTicker, value);
         }
 
+        private void StartOrResetValidateTicker()
+        {
+            if (AutoValidateTicker == null && SelectedUser != null)
+            {
+                AutoValidateTicker = new CountDownTicker(20);
+                AutoValidateTicker.Tick += () =>
+                {
+                    if (CanValidateCmd())
+                        ValidateCmd();
+                };
+            }
+            else
+            {
+                AutoValidateTicker?.Reset();
+            }
+        }
+
         private bool _UserInputFocused = true;
         public bool UserInputFocused
         {
@@ -238,6 +246,47 @@ namespace LSMEmprunts
         {
             get => _GearInputFocused;
             set => SetProperty(ref _GearInputFocused, value);
+        }
+
+        public DelegateCommand<GearBorrowInfo> SelectGearCommand { get; }
+        public async void SelectGearCmd(GearBorrowInfo info)
+        {
+            await SelectGearToBorrow(info.Gear);
+        }
+
+        private async Task SelectGearToBorrow(Gear gear)
+        {
+            //check for double input of a given gear
+            if (BorrowedGears.Contains(gear))
+            {
+                var vm = new WarningWindowViewModel("Matériel déjà emprunté");
+                MainWindowViewModel.Instance.Dialogs.Add(vm);
+                SetProperty(ref _SelectedGearId, string.Empty);
+                return;
+            }
+
+            //try to find a still open borrowing of the same gear - force close it if found
+            var existingBorrowing = _Context.Borrowings.FirstOrDefault(e => e.GearId == gear.Id && e.State == BorrowingState.Open);
+            if (existingBorrowing != null)
+            {
+                var confirmDlg = new ConfirmWindowViewModel("Ce matériel est déjà noté comme emprunté. L'emprunt en cours sera fermé. Etes vous sûr(e)?");
+                MainWindowViewModel.Instance.Dialogs.Add(confirmDlg);
+                if (await confirmDlg.Result == false)
+                {
+                    SetProperty(ref _SelectedGearId, string.Empty);
+                    return;
+                }
+                _BorrowingsToForceClose.Add(existingBorrowing);
+            }
+
+            BorrowedGears.Add(gear);
+            SetProperty(ref _SelectedGearId, string.Empty);
+            ValidateCommand.RaiseCanExecuteChanged();
+
+            //start auto close ticker if required
+            StartOrResetValidateTicker();
+
+            Gears.Refresh();
         }
     }
 }

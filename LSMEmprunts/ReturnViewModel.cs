@@ -10,7 +10,7 @@ using System.Windows.Data;
 
 namespace LSMEmprunts
 {
-    public class GearInfo
+    public class GearReturnInfo
     {
         public Gear Gear { get; set; }
         public bool Borrowed { get; set; }
@@ -42,7 +42,7 @@ namespace LSMEmprunts
 
         public ReturnViewModel()
         {
-            SelectGearCommand = new DelegateCommand<GearInfo>(SelectGearCmd);
+            SelectGearCommand = new DelegateCommand<GearReturnInfo>(SelectGearCmd);
             ValidateCommand = new DelegateCommand(ValidateCmd, CanValidateCmd);
             CancelCommand = new DelegateCommand(GoBackToHomeView);
 
@@ -50,13 +50,13 @@ namespace LSMEmprunts
 
             var gears = (from gear in _Context.Gears
                          let borrowed = gear.Borrowings.Any(e => e.State == BorrowingState.Open)
-                         select new GearInfo { Gear = gear, Borrowed = borrowed }).OrderByDescending(e=>e.Borrowed)
+                         select new GearReturnInfo { Gear = gear, Borrowed = borrowed }).OrderByDescending(e=>e.Borrowed)
                          .ToList();
 
             Gears = CollectionViewSource.GetDefaultView(gears);
             Gears.Filter = (item) =>
             {
-                var gearInfo = (GearInfo)item;
+                var gearInfo = (GearReturnInfo)item;
                 if (ClosingBorrowings.Any(e=>e.Borrowing.Gear==gearInfo.Gear))
                 {
                     return false;
@@ -119,8 +119,8 @@ namespace LSMEmprunts
             MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
         }
 
-        public DelegateCommand<GearInfo> SelectGearCommand { get; }
-        public void SelectGearCmd(GearInfo info)
+        public DelegateCommand<GearReturnInfo> SelectGearCommand { get; }
+        public void SelectGearCmd(GearReturnInfo info)
         {
             SelectGearToReturn(info.Gear);
         }
