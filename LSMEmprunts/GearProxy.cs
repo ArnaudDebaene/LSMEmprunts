@@ -33,9 +33,9 @@ namespace LSMEmprunts
             {
                 AddError(nameof(Name), "Nom requis");
             }
-            if (_Collection.Any(e => e != this && e.Name == Name))
+            if (_Collection.Any(e => e != this && e.Name == Name && e.Type == Type))
             {
-                AddError(nameof(Name), "Le nom doit être unique");
+                AddError(nameof(Name), "Le nom doit être unique pour un type d'équipement");
             }
         }
 
