@@ -29,6 +29,14 @@ namespace LSMEmprunts
     {
         public Borrowing Borrowing { get; set; }
         public string Comment { get; set; }
+
+        private bool _GearHasDefect = false;
+        public bool GearHasDefect
+        {
+            get => _GearHasDefect;
+            set => SetProperty(ref _GearHasDefect, value);
+        }
+        public string DefectDescription { get; set; }
     }
 
     public class ReturnViewModel : BindableBase, IDisposable
@@ -177,9 +185,10 @@ namespace LSMEmprunts
                 AutoValidateTicker = new CountDownTicker(20);
                 AutoValidateTicker.Tick += () =>
                 {
-
+#if !DEBUG
                     if (CanValidateCmd())
                         ValidateCmd();
+#endif
                 };
             }
             else

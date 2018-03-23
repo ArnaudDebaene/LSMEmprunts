@@ -12,6 +12,7 @@ namespace LSMEmprunts.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Gear> Gears { get; set; }
         public DbSet<Borrowing> Borrowings { get; set; }
+        public DbSet<GearFailure> Failures { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -19,6 +20,7 @@ namespace LSMEmprunts.Data
             modelBuilder.ApplyConfiguration(new UserMapping());
             modelBuilder.ApplyConfiguration(new GearMapping());
             modelBuilder.ApplyConfiguration(new BorrowingMapping());
+            modelBuilder.ApplyConfiguration(new GearFailureMapping());
         }
     }
 

@@ -76,9 +76,10 @@ namespace LSMEmprunts
             };
 
             var gears = (from gear in _Context.Gears
-                    let borrowed = gear.Borrowings.Any(e => e.State == BorrowingState.Open)
-                    select new GearBorrowInfo { Gear = gear, Available = !borrowed }).OrderByDescending(e => e.Available)
-                .ToList();
+                         where gear.Failures.Any(failure => failure.CloseDate==null)==false
+                         let borrowed = gear.Borrowings.Any(e => e.State == BorrowingState.Open)
+                         select new GearBorrowInfo { Gear = gear, Available = !borrowed }).OrderByDescending(e => e.Available)
+                         .ToList();
             Gears = CollectionViewSource.GetDefaultView(gears);
             Gears.Filter = (item) =>
             {
