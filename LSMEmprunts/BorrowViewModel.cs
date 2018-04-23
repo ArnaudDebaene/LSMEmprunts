@@ -140,14 +140,20 @@ namespace LSMEmprunts
         public string SelectedGearId
         {
             get => _SelectedGearId;
-            set { Application.Current.Dispatcher.BeginInvoke(new Action(() => SetSelectedGearId(value))); }
+            set
+            {
+                if (SetProperty(ref _SelectedGearId, value))
+                {
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() => AnalyzeSelectedGearId(value)));
+                }
+            }
+                
         }
 
-        private async void SetSelectedGearId(string value)
+        private async void AnalyzeSelectedGearId(string value)
         {
             var valueLower = value.ToLowerInvariant();
             var matchingGear = _Context.Gears.FirstOrDefault(e => e.Name.ToLowerInvariant() == valueLower);
-
 
             if (matchingGear != null)
             {
@@ -165,11 +171,7 @@ namespace LSMEmprunts
             if (matchingGear != null)
             {
                 await SelectGearToBorrow(matchingGear);
-            }
-            else
-            {
-                //if the gear was not found, simply update the typed value
-                SetProperty(ref _SelectedGearId, value);
+                SetProperty(ref _SelectedGearId, string.Empty, nameof(SelectedGearId));
             }
         }
 
@@ -261,7 +263,6 @@ namespace LSMEmprunts
             {
                 var vm = new WarningWindowViewModel("Matériel déjà emprunté");
                 MainWindowViewModel.Instance.Dialogs.Add(vm);
-                SetProperty(ref _SelectedGearId, string.Empty);
                 return;
             }
 
@@ -273,14 +274,13 @@ namespace LSMEmprunts
                 MainWindowViewModel.Instance.Dialogs.Add(confirmDlg);
                 if (await confirmDlg.Result == false)
                 {
-                    SetProperty(ref _SelectedGearId, string.Empty);
                     return;
                 }
                 _BorrowingsToForceClose.Add(existingBorrowing);
             }
 
             BorrowedGears.Add(gear);
-            SetProperty(ref _SelectedGearId, string.Empty);
+
             ValidateCommand.RaiseCanExecuteChanged();
 
             //start auto close ticker if required
