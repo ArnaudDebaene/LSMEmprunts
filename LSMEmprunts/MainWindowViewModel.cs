@@ -1,11 +1,10 @@
 ﻿using Mvvm;
+using MvvmDialogs;
 using MvvmDialogs.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace LSMEmprunts
 {
@@ -16,6 +15,19 @@ namespace LSMEmprunts
         private MainWindowViewModel()
         {
             CurrentPageViewModel = new HomeViewModel();
+
+            Application.Current.DispatcherUnhandledException += OnUnhandledException;
+        }
+
+        private void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            var vm = new MessageBoxViewModel
+            {
+                Caption = "Erreur",
+                Buttons = MessageBoxButton.OK,
+                Message = e.Exception.CompleteDump()
+            };
+            Dialogs.Add(vm);
         }
 
         private object _CurrentPageViewModel;

@@ -1,6 +1,5 @@
 ﻿using Mvvm.Commands;
 using System;
-using System.Threading.Tasks;
 
 namespace MvvmDialogs.ViewModels
 {

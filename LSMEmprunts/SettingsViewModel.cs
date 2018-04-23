@@ -1,9 +1,13 @@
 ﻿using LSMEmprunts.Data;
 using Mvvm;
 using Mvvm.Commands;
+using MvvmDialogs;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
 
 namespace LSMEmprunts
 {
@@ -19,11 +23,12 @@ namespace LSMEmprunts
             CreateGearCommand = new DelegateCommand(CreateGear);
             DeleteGearCommand = new DelegateCommand<GearProxy>(DeleteGear);
             GearHistoryCommand = new DelegateCommand<GearProxy>(ShowGearHistory);
+            GearsCsvCommand = new DelegateCommand(GearsCsv);
 
             CreateUserCommand = new DelegateCommand(CreateUser);
             DeleteUserCommand = new DelegateCommand<UserProxy>(DeleteUser);
             UserHistoryCommand = new DelegateCommand<UserProxy>(ShowUserHistory);
-            
+            UsersCsvCommand = new DelegateCommand(UsersCsv);            
 
             _Context = ContextFactory.OpenContext();
 
@@ -96,6 +101,26 @@ namespace LSMEmprunts
                 SetDirty();
             }
         }
+
+        public DelegateCommand UsersCsvCommand { get; }
+        private async void UsersCsv()
+        {
+            var vm = new SaveFileDialogViewModel
+            {
+                Filter="(*.csv)|*.csv"
+            };
+            MainWindowViewModel.Instance.Dialogs.Add(vm);
+            if (await vm.Completion)
+            {
+                using (var writer = new StreamWriter(vm.FileName, false, Encoding.UTF8))
+                {
+                    foreach(var user in Users)
+                    {
+                        writer.WriteLine($"{user.Name};{user.LicenceScanId};{user.Phone}");
+                    }
+                }
+            }
+        }
         
         public DelegateCommand CreateGearCommand { get; }
         private void CreateGear()
@@ -121,6 +146,27 @@ namespace LSMEmprunts
             if (await vm.HasModifiedData)
             {
                 SetDirty();
+            }
+        }
+
+        public DelegateCommand GearsCsvCommand { get; }
+        private async void GearsCsv()
+        {
+            var vm = new SaveFileDialogViewModel
+            {
+                Filter = "(*.csv)|*.csv"
+            };
+            MainWindowViewModel.Instance.Dialogs.Add(vm);
+            if (await vm.Completion)
+            {
+                using (var writer = new StreamWriter(vm.FileName, false, Encoding.UTF8))
+                {
+                    var converter = new GearTypeToStringConverter();
+                    foreach (var gear in Gears)
+                    {
+                        writer.WriteLine($"{converter.Convert(gear.Type, typeof(string), null, Thread.CurrentThread.CurrentUICulture)};{gear.Name};{gear.BarCode}");
+                    }
+                }
             }
         }
 

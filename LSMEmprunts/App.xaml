@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:LSMEmprunts"
              xmlns:data="clr-namespace:LSMEmprunts.Data"
              xmlns:core="clr-namespace:System;assembly=mscorlib"
+             xmlns:mvvmdialogs="clr-namespace:MvvmDialogs"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <!--Mapping between "Main" views and their viewmodel-->
@@ -24,6 +25,9 @@
         </DataTemplate>
 
         <!--Mapping between dialogs and their viewmodel-->
+        <mvvmdialogs:OpenFileDialogPresenter x:Key="{x:Type mvvmdialogs:OpenFileDialogViewModel}" x:Shared="false" />
+        <mvvmdialogs:MessageBoxPresenter x:Key="{x:Type mvvmdialogs:MessageBoxViewModel}" x:Shared="false" />
+        <mvvmdialogs:SaveFileDialogPresenter x:Key="{x:Type mvvmdialogs:SaveFileDialogViewModel}" x:Shared="false" />
         <local:GearHistoryDlg x:Key="{x:Type local:GearHistoryDlgViewModel}" x:Shared="false" />
         <local:UserHistoryDlg x:Key="{x:Type local:UserHistoryDlgViewModel}" x:Shared="false" />
         <local:PasswordDlg x:Key="{x:Type local:PasswordDlgViewModel}" x:Shared="false" />
@@ -147,6 +151,17 @@
             </DrawingBrush.Drawing>
         </DrawingBrush>
 
+        <DrawingBrush x:Key="CsvIcon" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <DrawingGroup.Children>
+                        <GeometryDrawing Brush="DarkGray" Geometry="F1 M 27.36,35.6208C 24.885,36.9158 21.805,37.5633 18.12,37.5633C 13.365,37.5633 9.55625,36.0321 6.69375,32.9696C 3.83125,29.9071 2.4,25.8883 2.4,20.9133C 2.4,15.5633 4.01,11.2408 7.23,7.94584C 10.45,4.65084 14.5325,3.00333 19.4775,3.00333C 22.6475,3.00333 25.275,3.36584 27.36,4.09084L 27.36,8.28335C 24.99,7.00333 22.3725,6.36334 19.5075,6.36334C 15.7075,6.36334 12.6263,7.66209 10.2637,10.2596C 7.90125,12.8571 6.72,16.3283 6.72,20.6733C 6.72,24.7983 7.82375,28.0846 10.0312,30.5321C 12.2387,32.9796 15.1375,34.2033 18.7275,34.2033C 22.0525,34.2033 24.93,33.4033 27.36,31.8033L 27.36,35.6208 Z "/>
+                        <GeometryDrawing Brush="DarkGray" Geometry="F1 M 32.64,35.4858L 32.64,30.8433C 33.175,31.3633 33.815,31.8321 34.56,32.2496C 35.305,32.6671 36.09,33.0183 36.915,33.3033C 37.74,33.5883 38.5687,33.8096 39.4012,33.9671C 40.2337,34.1246 41.0025,34.2033 41.7075,34.2033C 44.1425,34.2033 45.96,33.7421 47.16,32.8196C 48.36,31.8971 48.96,30.5708 48.96,28.8408C 48.96,27.9408 48.7587,27.1558 48.3562,26.4858C 47.9537,25.8158 47.3987,25.2058 46.6912,24.6558C 45.9837,24.1058 45.1462,23.5771 44.1787,23.0696C 43.2112,22.5621 42.1675,22.0308 41.0475,21.4758C 39.8675,20.8808 38.7662,20.2808 37.7437,19.6758C 36.7212,19.0708 35.8312,18.4033 35.0737,17.6733C 34.3162,16.9433 33.7212,16.1158 33.2887,15.1908C 32.8562,14.2658 32.64,13.1808 32.64,11.9358C 32.64,10.4108 32.9812,9.08459 33.6637,7.95709C 34.3462,6.82959 35.2425,5.90084 36.3525,5.17084C 37.4625,4.44083 38.7275,3.89709 40.1475,3.53959C 41.5675,3.18209 43.015,3.00333 44.49,3.00333C 47.85,3.00333 50.3,3.44584 51.84,4.33084L 51.84,8.76334C 49.845,7.16334 47.2825,6.36334 44.1525,6.36334C 43.2875,6.36334 42.4225,6.45584 41.5575,6.64084C 40.6925,6.82584 39.9225,7.12833 39.2475,7.54834C 38.5725,7.96835 38.0225,8.50834 37.5975,9.16834C 37.1725,9.82834 36.96,10.6333 36.96,11.5833C 36.96,12.4383 37.1212,13.1771 37.4437,13.7996C 37.7662,14.4221 38.2425,14.9896 38.8725,15.5021C 39.5025,16.0146 40.27,16.5121 41.175,16.9946C 42.08,17.4771 43.1225,18.0058 44.3025,18.5808C 45.5175,19.1708 46.6675,19.7921 47.7525,20.4446C 48.8375,21.0971 49.79,21.8208 50.61,22.6158C 51.43,23.4108 52.08,24.2896 52.56,25.2521C 53.04,26.2146 53.28,27.3183 53.28,28.5633C 53.28,30.2133 52.9512,31.6096 52.2937,32.7521C 51.6362,33.8946 50.75,34.8233 49.635,35.5383C 48.52,36.2533 47.2337,36.7696 45.7762,37.0871C 44.3187,37.4046 42.7825,37.5633 41.1675,37.5633C 40.6275,37.5633 39.9625,37.5171 39.1725,37.4246C 38.3825,37.3321 37.575,37.1971 36.75,37.0196C 35.925,36.8421 35.145,36.6221 34.41,36.3596C 33.675,36.0971 33.085,35.8058 32.64,35.4858 Z "/>
+                        <GeometryDrawing Brush="DarkGray" Geometry="F1 M 84.48,3.48334L 72.105,37.0833L 67.8,37.0833L 55.68,3.48334L 60.0675,3.48334L 69.2925,30.1233C 69.5875,30.9833 69.8125,31.9758 69.9675,33.1008L 70.0575,33.1008C 70.1825,32.1658 70.4375,31.1583 70.8225,30.0783L 80.235,3.48334L 84.48,3.48334 Z "/>
+                    </DrawingGroup.Children>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
 
         <!--Object providers for enumerations-->
         <ObjectDataProvider x:Key="GearTypeEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">

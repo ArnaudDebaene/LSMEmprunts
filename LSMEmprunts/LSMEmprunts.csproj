@@ -145,6 +145,7 @@
     </Compile>
     <Compile Include="ConfirmWindowViewModel.cs" />
     <Compile Include="CountDownTicker.cs" />
+    <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="GearHistoryDlg.xaml.cs">
       <DependentUpon>GearHistoryDlg.xaml</DependentUpon>
     </Compile>
@@ -162,7 +163,10 @@
     </Compile>
     <Compile Include="Migrations\ContextModelSnapshot.cs" />
     <Compile Include="MvvmDialogs\Behaviors\DialogBehavior.cs" />
+    <Compile Include="MvvmDialogs\MessageBox.cs" />
+    <Compile Include="MvvmDialogs\OpenFileDialog.cs" />
     <Compile Include="MvvmDialogs\Presenters\IDialogBoxPresenter.cs" />
+    <Compile Include="MvvmDialogs\SaveFileDialog.cs" />
     <Compile Include="MvvmDialogs\ViewModels\IDialogViewModel.cs" />
     <Compile Include="MvvmDialogs\ViewModels\IUserDialogViewModel.cs" />
     <Compile Include="MvvmDialogs\ViewModels\ModalDialogViewModelBase.cs" />
