@@ -2,6 +2,7 @@
 using Mvvm;
 using Mvvm.Commands;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -23,6 +24,44 @@ namespace LSMEmprunts
             {
                 var converter = new GearTypeToStringConverter();
                 return converter.Convert(Gear.Type, typeof(string), null, null) + " " + Gear.Name;
+            }
+        }       
+    }
+
+    /// <summary>
+    /// comparer for ordering of gears list : by type then by name (if name is a number)
+    /// </summary>
+    class GearComparer : IComparer
+    {
+        private static GearType[] Types = { GearType.Tank, GearType.Regulator, GearType.BCD };
+
+        public int Compare(object x, object y)
+        {
+            var xx = (GearBorrowInfo)x;
+            var yy = (GearBorrowInfo)y;
+
+            if (xx.Gear.Type != yy.Gear.Type)
+            {
+                return Array.IndexOf(Types, xx.Gear.Type) - Array.IndexOf(Types, yy.Gear.Type);
+            }
+
+            bool successParseNameX = int.TryParse(xx.Gear.Name, out var xxName);
+            bool successParseNameY = int.TryParse(yy.Gear.Name, out var yyName);
+            if (successParseNameX && successParseNameY)
+            {
+                return xxName - yyName;
+            }
+            else if (successParseNameX)
+            {
+                return -1;
+            }
+            else if (successParseNameY)
+            {
+                return 1;
+            }
+            else
+            {
+                return string.Compare(xx.Gear.Name, yy.Gear.Name);
             }
         }
     }
@@ -80,6 +119,7 @@ namespace LSMEmprunts
                     select new GearBorrowInfo { Gear = gear, Available = !borrowed }).OrderByDescending(e => e.Available)
                 .ToList();
             Gears = CollectionViewSource.GetDefaultView(gears);
+            ((ListCollectionView)Gears).CustomSort = new GearComparer();
             Gears.Filter = (item) =>
             {
                 var gearInfo = (GearBorrowInfo) item;
