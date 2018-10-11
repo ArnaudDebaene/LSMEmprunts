@@ -90,9 +90,17 @@ namespace LSMEmprunts
                     OnPropertyChanged(nameof(SelectedUserText));
                     Users.Refresh();
                     GearInputFocused = true; //move focus to gear input.
+                    UserSelected = true;
                     StartOrResetValidateTicker();
                 }
             }
+        }
+
+        private bool _UserSelected = false;
+        public bool UserSelected
+        {
+            get => _UserSelected;
+            set => SetProperty(ref _UserSelected, value);
         }
 
         public BorrowViewModel()
@@ -263,7 +271,7 @@ namespace LSMEmprunts
         {
             if (AutoValidateTicker == null && SelectedUser != null)
             {
-                AutoValidateTicker = new CountDownTicker(20);
+                AutoValidateTicker = new CountDownTicker(30);
                 AutoValidateTicker.Tick += () =>
                 {
                     if (CanValidateCmd())

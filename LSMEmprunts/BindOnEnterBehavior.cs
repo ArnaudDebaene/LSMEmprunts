@@ -5,6 +5,9 @@ using System.Windows.Data;
 
 namespace LSMEmprunts
 {
+    /// <summary>
+    /// behavior to update the binding expression of a TextBox' Text property from control to source when Enter is pressed
+    /// </summary>
     public class BindOnEnterBehavior : Behavior<TextBox>
     {
         protected override void OnAttached()

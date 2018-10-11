@@ -174,7 +174,7 @@ namespace LSMEmprunts
 
             if (AutoValidateTicker == null)
             {
-                AutoValidateTicker = new CountDownTicker(20);
+                AutoValidateTicker = new CountDownTicker(30);
                 AutoValidateTicker.Tick += () =>
                 {
 

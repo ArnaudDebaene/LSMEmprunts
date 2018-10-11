@@ -30,15 +30,16 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0">Scannez votre licence ou saisissez votre nom</TextBlock>
-            <TextBox Grid.Row="1" x:Name="UserTextBox"
-                     Text="{Binding Path=SelectedUserText, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox Grid.Row="1" Text="{Binding Path=SelectedUserText, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding UserSelected, Converter={StaticResource BoolToInvertConverter}, Mode=OneWay}">
                 <i:Interaction.Behaviors>
                     <local:BindOnEnterBehavior/>
                     <local:SetFocusBehavior IsFocused="{Binding UserInputFocused}" />
                 </i:Interaction.Behaviors>
             </TextBox>
 
-            <ListBox Grid.Row="2" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}">
+            <ListBox Grid.Row="2" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" 
+                     IsEnabled="{Binding UserSelected, Converter={StaticResource BoolToInvertConverter}, Mode=OneWay}">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type data:User}">
                         <TextBlock Text="{Binding Name}" />
@@ -64,7 +65,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0">Scannez la matériel ou double cliquez dans la liste</TextBlock>
-            <TextBox x:Name="GearTextBox" Grid.Row="1" Text="{Binding SelectedGearId}">
+            <TextBox Grid.Row="1" Text="{Binding SelectedGearId}">
                 <i:Interaction.Behaviors>
                     <local:BindOnEnterBehavior/>
                     <local:SetFocusBehavior IsFocused="{Binding GearInputFocused}" />
