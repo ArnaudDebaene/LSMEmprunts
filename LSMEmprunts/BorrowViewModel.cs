@@ -89,9 +89,10 @@ namespace LSMEmprunts
                     _SelectedUserText = null;
                     OnPropertyChanged(nameof(SelectedUserText));
                     Users.Refresh();
-                    GearInputFocused = true; //move focus to gear input.
                     UserSelected = true;
                     StartOrResetValidateTicker();
+                    GearInputFocused = true; //move focus to gear input.
+                    
                 }
             }
         }
@@ -271,7 +272,7 @@ namespace LSMEmprunts
         {
             if (AutoValidateTicker == null && SelectedUser != null)
             {
-                AutoValidateTicker = new CountDownTicker(30);
+                AutoValidateTicker = new CountDownTicker(60);
                 AutoValidateTicker.Tick += () =>
                 {
                     if (CanValidateCmd())
@@ -335,6 +336,7 @@ namespace LSMEmprunts
             StartOrResetValidateTicker();
 
             Gears.Refresh();
+            GearInputFocused = true; //move focus to gear input.
         }
     }
 }

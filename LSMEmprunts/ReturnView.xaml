@@ -32,7 +32,7 @@
             <TextBox Grid.Row="1" Text="{Binding SelectedGearId}">
                 <i:Interaction.Behaviors>
                     <local:BindOnEnterBehavior />
-                    <local:SetFocusBehavior IsFocused="True" />
+                    <local:SetFocusBehavior IsFocused="{Binding GearInputFocused}" />
                 </i:Interaction.Behaviors>
             </TextBox>
             <ListBox Grid.Row="2" ItemsSource="{Binding Gears}" Margin="0,10,0,5" HorizontalContentAlignment="Stretch" >

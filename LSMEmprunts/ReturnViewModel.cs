@@ -63,6 +63,8 @@ namespace LSMEmprunts
                 }
                 return true;
             };
+
+            GearInputFocused = true;
         }
 
         public void Dispose()
@@ -174,7 +176,7 @@ namespace LSMEmprunts
 
             if (AutoValidateTicker == null)
             {
-                AutoValidateTicker = new CountDownTicker(30);
+                AutoValidateTicker = new CountDownTicker(60);
                 AutoValidateTicker.Tick += () =>
                 {
 
@@ -189,6 +191,14 @@ namespace LSMEmprunts
 
             SetProperty(ref _SelectedGearId, string.Empty, nameof(SelectedGearId));
             Gears.Refresh();
+            GearInputFocused = true;
+        }
+
+        private bool _GearInputFocused;
+        public bool GearInputFocused
+        {
+            get => _GearInputFocused;
+            set => SetProperty(ref _GearInputFocused, value);
         }
     }
 }
