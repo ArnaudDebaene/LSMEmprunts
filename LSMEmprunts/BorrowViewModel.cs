@@ -75,34 +75,50 @@ namespace LSMEmprunts
         public ICollectionView Users { get; }
         public ICollectionView Gears { get; }
 
-        private User _SelectedUser;
-        public User SelectedUser
+
+        private User _CurrentUser;
+        /// <summary>
+        /// this property is bound to the current selection in the users listbox
+        /// </summary>
+        public User CurrentUser
         {
-            get => _SelectedUser;
+            get => _CurrentUser;
             set
             {
-                var wasChanged = SetProperty(ref _SelectedUser, value);
-                ValidateCommand.RaiseCanExecuteChanged();
-
-                if (wasChanged && value != null)
+                if (SetProperty(ref _CurrentUser, value) && value!=null)
                 {
-                    _SelectedUserText = null;
-                    OnPropertyChanged(nameof(SelectedUserText));
-                    Users.Refresh();
-                    UserSelected = true;
-                    StartOrResetValidateTicker();
-                    GearInputFocused = true; //move focus to gear input.
-                    
+                    SetSelectedUser(value);
                 }
             }
         }
 
-        private bool _UserSelected = false;
-        public bool UserSelected
+        private void SetSelectedUser(User user)
         {
-            get => _UserSelected;
-            set => SetProperty(ref _UserSelected, value);
+            System.Diagnostics.Debug.Assert(user != null);
+            SelectedUsers.Clear();
+            SelectedUsers.Add(user);
+
+            CurrentUser = user;
+            _SelectedUserText = null;
+
+            OnPropertyChanged(nameof(SelectedUserText));
+            OnPropertyChanged(nameof(UserSelected));
+            OnPropertyChanged(nameof(SelectedUser));
+
+            Users.Refresh();
+            StartOrResetValidateTicker();
+            GearInputFocused = true; //move focus to gear input.            
         }
+
+        public bool UserSelected => SelectedUsers.Count > 0;
+
+        public User SelectedUser => SelectedUsers.FirstOrDefault();
+
+        /// <summary>
+        /// this collection contains at most 1 item that is the "curerntly selected and validated" user : displayed in bold below the users list, 
+        /// and the one that is used when saving the borrow operation
+        /// </summary>
+        public ObservableCollection<User> SelectedUsers { get; } = new ObservableCollection<User>();
 
         public BorrowViewModel()
         {
@@ -158,7 +174,7 @@ namespace LSMEmprunts
                 if (Users.Cast<User>().Count() == 1)
                 {
                     System.Diagnostics.Debug.WriteLine("User input - found matching user by name");
-                    SelectedUser = Users.Cast<User>().First();
+                   SetSelectedUser(Users.Cast<User>().First());
                     return;
                 }
 
@@ -166,7 +182,7 @@ namespace LSMEmprunts
                 if (matchingUserByLicence != null)
                 {
                     System.Diagnostics.Debug.WriteLine("User input - found matching user by licence");
-                    SelectedUser = matchingUserByLicence;
+                    SetSelectedUser(matchingUserByLicence);
                     return;
                 }
 
@@ -196,7 +212,6 @@ namespace LSMEmprunts
                     Application.Current.Dispatcher.BeginInvoke(new Action(() => AnalyzeSelectedGearId(value)));
                 }
             }
-                
         }
 
         private async void AnalyzeSelectedGearId(string value)

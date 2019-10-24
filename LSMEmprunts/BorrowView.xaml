@@ -30,19 +30,22 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0">Scannez votre licence ou saisissez votre nom</TextBlock>
-            <TextBox Grid.Row="1" Text="{Binding Path=SelectedUserText, UpdateSourceTrigger=PropertyChanged}"
-                     IsEnabled="{Binding UserSelected, Converter={StaticResource BoolToInvertConverter}, Mode=OneWay}">
+            <TextBox Grid.Row="1" Text="{Binding Path=SelectedUserText, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Behaviors>
                     <local:BindOnEnterBehavior/>
                     <local:SetFocusBehavior IsFocused="{Binding UserInputFocused}" />
                 </i:Interaction.Behaviors>
             </TextBox>
 
-            <ListBox Grid.Row="2" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" 
-                     IsEnabled="{Binding UserSelected, Converter={StaticResource BoolToInvertConverter}, Mode=OneWay}">
+            <ListBox Grid.Row="2" ItemsSource="{Binding Users}" SelectedItem="{Binding CurrentUser}">
+                <i:Interaction.Behaviors>
+                    <local:ItemsControlTagBehavior TaggedItems="{Binding SelectedUsers}" />
+                </i:Interaction.Behaviors>
+                
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type data:User}">
-                        <TextBlock Text="{Binding Name}" />
+                        <TextBlock Text="{Binding Name}" 
+                                   FontWeight="{Binding RelativeSource={RelativeSource Self}, Path=(local:ItemsControlTagBehavior.Tagged), Converter={StaticResource BoolToBoldConverter}}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
