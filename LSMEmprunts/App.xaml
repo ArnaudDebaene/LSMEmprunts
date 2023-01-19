@@ -40,6 +40,7 @@
         <local:GearTypeToStringConverter x:Key="GearTypeConverter" />
         <local:BorrowStateToStringConverter x:Key="BorrowStateConverter"/>
         <local:BoolToBoldConverter x:Key="BoolToBoldConverter"/>
+        <local:GearDisplayNameConverter x:Key="GearDisplayNameConverter" />
 
         <!--Icons-->
         <DrawingBrush x:Key="ReturnIcon" Stretch="Uniform" >

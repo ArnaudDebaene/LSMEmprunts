@@ -146,6 +146,7 @@
     <Compile Include="ConfirmWindowViewModel.cs" />
     <Compile Include="CountDownTicker.cs" />
     <Compile Include="ExceptionExtensions.cs" />
+    <Compile Include="GearDisplayNameConverter.cs" />
     <Compile Include="GearHistoryDlg.xaml.cs">
       <DependentUpon>GearHistoryDlg.xaml</DependentUpon>
     </Compile>

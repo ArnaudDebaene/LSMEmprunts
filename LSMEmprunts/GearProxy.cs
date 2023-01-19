@@ -80,12 +80,12 @@ namespace LSMEmprunts
 
         public static string[] AllowedTankSizes { get; } = 
         {
-            "6", "7", "9", "10", "12", "15", "18"
+            string.Empty, "6L", "7L", "9L", "10L", "12L", "15L", "18L"
         };
 
         public static string[] AllowedBCDSizes { get; } =
         {
-            "Enfant", "XXS", "XS", "S", "M", "L", "XL", "XXL"
+            string.Empty, "Enfant", "XXS", "XS", "S", "M", "L", "XL", "XXL"
         };
 
         private void EvaluateSizeValidity()

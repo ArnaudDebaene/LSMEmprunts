@@ -20,7 +20,8 @@ namespace LSMEmprunts
             get
             {
                 var converter = new GearTypeToStringConverter();
-                return converter.Convert(Gear.Type, typeof(string), null, null) + " " + Gear.Name;
+                var converter2 = new GearDisplayNameConverter();
+                return converter.Convert(Gear.Type, typeof(string), null, null) + " " + converter2.Convert(Gear, typeof(string), null, null);
             }
         }
     }

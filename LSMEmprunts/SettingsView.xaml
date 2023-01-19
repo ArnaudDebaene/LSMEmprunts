@@ -22,12 +22,12 @@
         <local:GearSizeTemplateSelector x:Key="SizeTemplateSelector">
             <local:GearSizeTemplateSelector.TankSizeTemplate>
                 <DataTemplate DataType="local:GearProxy">
-                    <ComboBox SelectedItem="{Binding Size}" ItemsSource="{x:Static local:GearProxy.AllowedTankSizes}" />
+                    <ComboBox SelectedItem="{Binding Size, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Static local:GearProxy.AllowedTankSizes}" />
                 </DataTemplate>
             </local:GearSizeTemplateSelector.TankSizeTemplate>
             <local:GearSizeTemplateSelector.BCDSizeTemplate>
                 <DataTemplate DataType="local:GearProxy">
-                    <ComboBox SelectedItem="{Binding Size}" ItemsSource="{x:Static local:GearProxy.AllowedBCDSizes}" />
+                    <ComboBox SelectedItem="{Binding Size, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Static local:GearProxy.AllowedBCDSizes}" />
                 </DataTemplate>
             </local:GearSizeTemplateSelector.BCDSizeTemplate>
             <local:GearSizeTemplateSelector.EmptyTemplate>
