@@ -67,5 +67,49 @@ namespace LSMEmprunts
                 AddError(nameof(BarCode), "le code barre doit être unique");
             }
         }
+
+        public string Size
+        {
+            get => WrappedElt.Size;
+            set
+            {
+                SetProperty(e=>e.Size, value);
+                EvaluateSizeValidity();
+            }
+        }
+
+        public static string[] AllowedTankSizes { get; } = 
+        {
+            "6", "7", "9", "10", "12", "15", "18"
+        };
+
+        public static string[] AllowedBCDSizes { get; } =
+        {
+            "Enfant", "XXS", "XS", "S", "M", "L", "XL", "XXL"
+        };
+
+        private void EvaluateSizeValidity()
+        {
+            ClearErrors(nameof(Size));
+            if (string.IsNullOrEmpty(Size))
+            {
+                return;
+            }
+            switch(Type)
+            {
+                case GearType.Tank:
+                    if (!AllowedTankSizes.Contains(Size))
+                    {
+                        AddError(nameof(Size), "taille de bloc invalide");
+                    }
+                    break;
+                case GearType.BCD:
+                    if (!AllowedBCDSizes.Contains(Size))
+                    {
+                        AddError(nameof(Size), "taille de stab invalide");
+                    }
+                    break;
+            }
+        }
     }
 }

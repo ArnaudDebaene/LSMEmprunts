@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 
 namespace LSMEmprunts
 {
-    class UserHistoryDlgViewModel : ModalDialogViewModelBase
+    internal sealed class UserHistoryDlgViewModel : ModalDialogViewModelBase
     {
         private readonly TaskCompletionSource<bool> _ResultTask = new TaskCompletionSource<bool>();
         public Task<bool> HasModifiedData => _ResultTask.Task;
 
         private readonly Context _Context;
-        private readonly User _User;
 
         public ObservableCollection<Borrowing> Borrowings { get; }
 
@@ -25,7 +24,6 @@ namespace LSMEmprunts
             ClearHistoryCommand = new DelegateCommand(ClearHistory);
 
             _Context = context;
-            _User = user;
 
             Title = "Matériel emprunté par " + user.Name;
 
@@ -34,6 +32,7 @@ namespace LSMEmprunts
         }
 
         public DelegateCommand ClearHistoryCommand { get; }
+
         private void ClearHistory()
         {
             _Context.Borrowings.RemoveRange(Borrowings);
@@ -48,6 +47,5 @@ namespace LSMEmprunts
             _ResultTask.SetResult(_HasModifiedData);
             base.RequestClose();
         }
-
     }
 }

@@ -4,7 +4,7 @@ using System.Windows.Threading;
 
 namespace LSMEmprunts
 {
-    public class CountDownTicker : BindableBase, IDisposable
+    public sealed class CountDownTicker : BindableBase, IDisposable
     {
         public event Action Tick;
 

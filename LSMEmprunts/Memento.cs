@@ -5,7 +5,7 @@ using System.Reflection;
 namespace LSMEmprunts
 {
     /// <summary>
-    /// A implemenation of the memento design pattern using introspection to get/restore all properties of the savec object
+    /// A implementation of the memento design pattern using introspection to get/restore all properties of the saved object
     /// </summary>
     class Memento<T>
     {

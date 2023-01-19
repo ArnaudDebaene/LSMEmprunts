@@ -16,7 +16,7 @@ namespace MvvmDialogs.ViewModels
 
         public virtual void RequestClose()
         {
-            DialogClosing?.Invoke(this, null);
+            DialogClosing?.Invoke(this, EventArgs.Empty);
         }
 
         protected bool DialogResult = false;

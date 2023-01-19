@@ -4,7 +4,7 @@ using MvvmDialogs.ViewModels;
 
 namespace LSMEmprunts
 {
-    public class ConfirmWindowViewModel : ModalDialogViewModelBase
+    public sealed class ConfirmWindowViewModel : ModalDialogViewModelBase
     {
         public string Message { get; }
 

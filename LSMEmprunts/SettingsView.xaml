@@ -18,6 +18,22 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <local:GearSizeTemplateSelector x:Key="SizeTemplateSelector">
+            <local:GearSizeTemplateSelector.TankSizeTemplate>
+                <DataTemplate DataType="local:GearProxy">
+                    <ComboBox SelectedItem="{Binding Size}" ItemsSource="{x:Static local:GearProxy.AllowedTankSizes}" />
+                </DataTemplate>
+            </local:GearSizeTemplateSelector.TankSizeTemplate>
+            <local:GearSizeTemplateSelector.BCDSizeTemplate>
+                <DataTemplate DataType="local:GearProxy">
+                    <ComboBox SelectedItem="{Binding Size}" ItemsSource="{x:Static local:GearProxy.AllowedBCDSizes}" />
+                </DataTemplate>
+            </local:GearSizeTemplateSelector.BCDSizeTemplate>
+            <local:GearSizeTemplateSelector.EmptyTemplate>
+                <DataTemplate DataType="local:GearProxy" />
+            </local:GearSizeTemplateSelector.EmptyTemplate>
+        </local:GearSizeTemplateSelector>
     </UserControl.Resources>
 
     <Grid x:Name="Root">
@@ -115,6 +131,7 @@
                                         Binding="{Binding Name, ValidatesOnNotifyDataErrors=True, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
                     <DataGridTextColumn Header="Code Barre" EditingElementStyle="{StaticResource ErrorStyle}"
                                         Binding="{Binding BarCode, ValidatesOnNotifyDataErrors=True, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+                    <DataGridTemplateColumn Header="Taille" CellTemplateSelector="{StaticResource SizeTemplateSelector}" />
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="{x:Type local:GearProxy}">

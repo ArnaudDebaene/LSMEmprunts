@@ -8,7 +8,7 @@ namespace MvvmDialogs
     /// <summary>
     /// A ViewModel for a system standard Open File Dialog
     /// </summary>
-    public class OpenFileDialogViewModel : IDialogViewModel
+    public sealed class OpenFileDialogViewModel : IDialogViewModel
     {
         public bool Multiselect { get; set; } = false;
         public bool ReadOnlyChecked { get; set; }

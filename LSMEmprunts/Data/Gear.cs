@@ -22,6 +22,8 @@ namespace LSMEmprunts.Data
         public string BarCode { get; set; }
 
         public ICollection<Borrowing> Borrowings { get; set; }
+
+        public string Size { get; set; }
     }
 
 

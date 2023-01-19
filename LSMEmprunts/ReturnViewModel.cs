@@ -10,7 +10,7 @@ using System.Windows.Data;
 
 namespace LSMEmprunts
 {
-    public class GearReturnInfo
+    public sealed class GearReturnInfo
     {
         public Gear Gear { get; set; }
         public bool Borrowed { get; set; }
@@ -25,13 +25,13 @@ namespace LSMEmprunts
         }
     }
 
-    public class ReturnInfo : BindableBase
+    public sealed class ReturnInfo : BindableBase
     {
         public Borrowing Borrowing { get; set; }
         public string Comment { get; set; }
     }
 
-    public class ReturnViewModel : BindableBase, IDisposable
+    public sealed class ReturnViewModel : BindableBase, IDisposable
     {
         private readonly Context _Context;
 

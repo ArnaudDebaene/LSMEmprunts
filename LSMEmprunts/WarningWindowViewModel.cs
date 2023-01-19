@@ -8,16 +8,15 @@ using System.Windows.Threading;
 
 namespace LSMEmprunts
 {
-    public class WarningWindowViewModel : ModalDialogViewModelBase
+    public sealed class WarningWindowViewModel : ModalDialogViewModelBase
     {
         public string Message { get; }
 
-        public TimeSpan Duration;
+        private static readonly TimeSpan Duration = TimeSpan.FromSeconds(4);
 
         public WarningWindowViewModel(string msg)
         {
             Message = msg;
-            Duration = TimeSpan.FromSeconds(4);
         }
 
         private DispatcherTimer _Timer;

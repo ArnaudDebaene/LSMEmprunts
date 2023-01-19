@@ -5,11 +5,10 @@ using MvvmDialogs.ViewModels;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace LSMEmprunts
 {
-    class GearHistoryDlgViewModel : ModalDialogViewModelBase
+    internal sealed class GearHistoryDlgViewModel : ModalDialogViewModelBase
     {
         private readonly TaskCompletionSource<bool> _ResultTask = new TaskCompletionSource<bool>();
         public Task<bool> HasModifiedData => _ResultTask.Task;
@@ -20,7 +19,6 @@ namespace LSMEmprunts
         public ObservableCollection<Borrowing> Borrowings { get; }
 
         public string Title { get; }
-             
 
         public GearHistoryDlgViewModel(Gear gear, Context context)
         {
@@ -38,6 +36,7 @@ namespace LSMEmprunts
         }
 
         public DelegateCommand ClearHistoryCommand { get; }
+
         private void ClearHistory()
         {
             _Context.Borrowings.RemoveRange(Borrowings);

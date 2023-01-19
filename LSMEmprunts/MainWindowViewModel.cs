@@ -8,7 +8,7 @@ using System.Windows.Threading;
 
 namespace LSMEmprunts
 {
-    public class MainWindowViewModel : BindableBase
+    public sealed class MainWindowViewModel : BindableBase
     {
         public static MainWindowViewModel Instance { get; } = new MainWindowViewModel();
 

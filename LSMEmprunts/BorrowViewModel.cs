@@ -66,7 +66,7 @@ namespace LSMEmprunts
         }
     }
 
-    public class BorrowViewModel : BindableBase, IDisposable
+    public sealed class BorrowViewModel : BindableBase, IDisposable
     {
         private readonly Context _Context;
 

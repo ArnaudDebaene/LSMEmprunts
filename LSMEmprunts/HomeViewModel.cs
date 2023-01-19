@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace LSMEmprunts
 {
-    public class HomeViewModel : BindableBase
+    public sealed class HomeViewModel : BindableBase
     {       
         public ObservableCollection<Borrowing> ActiveBorrowings { get; }
 

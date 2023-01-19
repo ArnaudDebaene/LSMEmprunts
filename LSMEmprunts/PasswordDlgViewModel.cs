@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace LSMEmprunts
 {
-    public class PasswordDlgViewModel : ModalDialogViewModelBase
+    public sealed class PasswordDlgViewModel : ModalDialogViewModelBase
     {
         private readonly TaskCompletionSource<string> _ResultTask = new TaskCompletionSource<string>();
         public Task<string> Result => _ResultTask.Task;
@@ -17,6 +17,7 @@ namespace LSMEmprunts
         }
 
         public DelegateCommand<PasswordBox> OkCommand { get; }
+
         public void OnOk(PasswordBox box)
         {
             RequestClose();
@@ -24,6 +25,7 @@ namespace LSMEmprunts
         }
 
         public DelegateCommand CancelCommand { get; }
+
         public void OnCancel()
         {
             RequestClose();

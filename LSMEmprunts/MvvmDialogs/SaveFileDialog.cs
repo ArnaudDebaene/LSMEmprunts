@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace MvvmDialogs
 {
-    public class SaveFileDialogViewModel : IDialogViewModel
+    public sealed class SaveFileDialogViewModel : IDialogViewModel
     {
         public bool OverwritePrompt { get; set; } = true;
         public bool CreatePrompt { get; set; } = false;

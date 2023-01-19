@@ -162,6 +162,10 @@
     <Compile Include="Migrations\20171002074206_AddUserPhone.designer.cs">
       <DependentUpon>20171002074206_AddUserPhone.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20230119085435_AddGearSize.cs" />
+    <Compile Include="Migrations\20230119085435_AddGearSize.designer.cs">
+      <DependentUpon>20230119085435_AddGearSize.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\ContextModelSnapshot.cs" />
     <Compile Include="MvvmDialogs\Behaviors\DialogBehavior.cs" />
     <Compile Include="MvvmDialogs\MessageBox.cs" />

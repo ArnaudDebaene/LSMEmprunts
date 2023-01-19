@@ -1,15 +1,11 @@
 ﻿using MvvmDialogs.Presenters;
 using MvvmDialogs.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace MvvmDialogs
 {
-    public class MessageBoxViewModel : IDialogViewModel
+    public sealed class MessageBoxViewModel : IDialogViewModel
     {
         public string Caption { get; set; } = "";
 

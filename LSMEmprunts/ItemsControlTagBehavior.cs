@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -12,7 +9,6 @@ using System.Windows.Interactivity;
 
 namespace LSMEmprunts
 {
-
     /// <summary>
     /// This behavior add a "Tagged" boolean attached property to all the Items of the associated ItemsControl. Default value of this property is false
     /// When the TaggedItems property is set, the "Tagged" AP of each item is set to true for items whose DataContext is in the TaggedItems collection.
@@ -30,6 +26,7 @@ namespace LSMEmprunts
         }
 
         #region Tagged Attached property
+
         public static readonly DependencyProperty TaggedProperty = DependencyProperty.RegisterAttached("Tagged", typeof(bool), typeof(ItemsControlTagBehavior),
             new FrameworkPropertyMetadata(Boxes.FalseBox, FrameworkPropertyMetadataOptions.Inherits | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
@@ -42,9 +39,11 @@ namespace LSMEmprunts
         {
             target.SetValue(TaggedProperty, value ? Boxes.TrueBox : Boxes.FalseBox);
         }
-        #endregion
+
+        #endregion Tagged Attached property
 
         #region TaggedItems property
+
         public static readonly DependencyProperty TaggedItemsProperty = DependencyProperty.Register(nameof(TaggedItems), typeof(IEnumerable), typeof(ItemsControlTagBehavior),
             new PropertyMetadata(null, OnTaggedItemsPropertyChanged));
 
@@ -67,7 +66,8 @@ namespace LSMEmprunts
             get => (IEnumerable)GetValue(TaggedItemsProperty);
             set => SetValue(TaggedItemsProperty, value);
         }
-        #endregion
+
+        #endregion TaggedItems property
 
         protected override void OnAttached()
         {
@@ -111,6 +111,7 @@ namespace LSMEmprunts
                         }
                     }
                     break;
+
                 case NotifyCollectionChangedAction.Remove:
                     foreach (var removedItem in args.OldItems)
                     {
@@ -121,6 +122,7 @@ namespace LSMEmprunts
                         }
                     }
                     break;
+
                 case NotifyCollectionChangedAction.Reset:
                     UpdateViewFromModel();
                     break;
@@ -151,12 +153,14 @@ namespace LSMEmprunts
                         SetTagged(newContainer, TaggedItems.Cast<object>().Any(e => e == newContainer.DataContext));
                     }
                     break;
+
                 case NotifyCollectionChangedAction.Remove:
                     foreach (FrameworkElement oldContainer in args.OldItems)
                     {
                         SetTagged(oldContainer, false);
                     }
                     break;
+
                 case NotifyCollectionChangedAction.Reset:
                     UpdateViewFromModel();
                     break;

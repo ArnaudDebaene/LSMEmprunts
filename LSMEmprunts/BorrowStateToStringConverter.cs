@@ -19,7 +19,7 @@ namespace LSMEmprunts
                 case BorrowingState.ForcedClose:
                     return "Clos de force";
             }
-            throw new ArgumentOutOfRangeException();
+            throw new ArgumentOutOfRangeException(nameof(value));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

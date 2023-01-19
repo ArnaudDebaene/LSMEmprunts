@@ -22,7 +22,7 @@ namespace LSMEmprunts
             set
             {                
                 SetProperty(e => e.Name, value);
-                EvaluateNameValidity();   
+                EvaluateNameValidity();
             }
         }
 
