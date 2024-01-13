@@ -1,7 +1,7 @@
-﻿using MvvmDialogs.Presenters;
+﻿using Microsoft.Win32;
+using MvvmDialogs.Presenters;
 using MvvmDialogs.ViewModels;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace MvvmDialogs
 {
@@ -44,7 +44,7 @@ namespace MvvmDialogs
             vm.InitialDirectory = dlg.InitialDirectory;
             vm.Title = dlg.Title;
             vm.ValidateNames = dlg.ValidateNames;
-            vm.ResultPromise.SetResult(result == DialogResult.OK);
+            vm.ResultPromise.SetResult(result ?? false);
         }
     }
 }

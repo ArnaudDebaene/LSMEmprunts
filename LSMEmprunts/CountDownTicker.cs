@@ -1,10 +1,10 @@
-﻿using Mvvm;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Windows.Threading;
 
 namespace LSMEmprunts
 {
-    public sealed class CountDownTicker : BindableBase, IDisposable
+    public sealed class CountDownTicker : ObservableObject, IDisposable
     {
         public event Action Tick;
 

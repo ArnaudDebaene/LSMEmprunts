@@ -1,7 +1,7 @@
-﻿using LSMEmprunts.Data;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using LSMEmprunts.Data;
 using Microsoft.EntityFrameworkCore;
-using Mvvm;
-using Mvvm.Commands;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace LSMEmprunts
 {
-    public sealed class HomeViewModel : BindableBase
+    public sealed class HomeViewModel : ObservableObject
     {       
         public ObservableCollection<Borrowing> ActiveBorrowings { get; }
 
@@ -17,9 +17,9 @@ namespace LSMEmprunts
         {
             using (var context = ContextFactory.OpenContext())
             {
-                BorrowCommand = new DelegateCommand(BorrowCmd);
-                ReturnCommand = new DelegateCommand(ReturnCmd);
-                SettingsCommand = new DelegateCommand(SettingsCmd);
+                BorrowCommand = new RelayCommand(BorrowCmd);
+                ReturnCommand = new RelayCommand(ReturnCmd);
+                SettingsCommand = new RelayCommand(SettingsCmd);
 
                 ActiveBorrowings = new ObservableCollection<Borrowing>(
                     context.Borrowings.Include(e=>e.User).Include(e=>e.Gear)

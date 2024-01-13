@@ -1,12 +1,12 @@
 ﻿using LSMEmprunts.Data;
 using Microsoft.EntityFrameworkCore;
-using Mvvm;
-using Mvvm.Commands;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace LSMEmprunts
 {
@@ -26,13 +26,13 @@ namespace LSMEmprunts
         }
     }
 
-    public sealed class ReturnInfo : BindableBase
+    public sealed class ReturnInfo : ObservableObject
     {
         public Borrowing Borrowing { get; set; }
         public string Comment { get; set; }
     }
 
-    public sealed class ReturnViewModel : BindableBase, IDisposable
+    public sealed class ReturnViewModel : ObservableObject, IDisposable
     {
         private readonly Context _Context;
 
@@ -43,9 +43,9 @@ namespace LSMEmprunts
 
         public ReturnViewModel()
         {
-            SelectGearCommand = new DelegateCommand<GearReturnInfo>(SelectGearCmd);
-            ValidateCommand = new DelegateCommand(ValidateCmd, CanValidateCmd);
-            CancelCommand = new DelegateCommand(GoBackToHomeView);
+            SelectGearCommand = new RelayCommand<GearReturnInfo>(SelectGearCmd);
+            ValidateCommand = new RelayCommand(ValidateCmd, CanValidateCmd);
+            CancelCommand = new RelayCommand(GoBackToHomeView);
 
             _Context = ContextFactory.OpenContext();
 
@@ -106,7 +106,7 @@ namespace LSMEmprunts
             }
         }
 
-        public DelegateCommand ValidateCommand { get; }
+        public RelayCommand ValidateCommand { get; }
         private void ValidateCmd()
         {
             _AutoValidateTicker?.Dispose();
@@ -116,13 +116,13 @@ namespace LSMEmprunts
         }
         private bool CanValidateCmd() => ClosingBorrowings.Any();
 
-        public DelegateCommand CancelCommand { get; }
+        public RelayCommand CancelCommand { get; }
         private void GoBackToHomeView()
         {
             MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
         }
 
-        public DelegateCommand<GearReturnInfo> SelectGearCommand { get; }
+        public RelayCommand<GearReturnInfo> SelectGearCommand { get; }
         public void SelectGearCmd(GearReturnInfo info)
         {
             SelectGearToReturn(info.Gear);

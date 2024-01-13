@@ -5,7 +5,7 @@
              xmlns:data="clr-namespace:LSMEmprunts.Data"
              xmlns:core="clr-namespace:System;assembly=mscorlib"
              xmlns:mvvmdialogs="clr-namespace:MvvmDialogs"
-             StartupUri="MainWindow.xaml">
+             StartupUri="MainWindow.xaml" Startup="OnAppStartup">
     <Application.Resources>
         <!--Mapping between "Main" views and their viewmodel-->
         <DataTemplate DataType="{x:Type local:HomeViewModel}">

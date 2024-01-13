@@ -1,6 +1,6 @@
-﻿using LSMEmprunts.Data;
+﻿using CommunityToolkit.Mvvm.Input;
+using LSMEmprunts.Data;
 using Microsoft.EntityFrameworkCore;
-using Mvvm.Commands;
 using MvvmDialogs.ViewModels;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -21,7 +21,7 @@ namespace LSMEmprunts
 
         public UserHistoryDlgViewModel(User user, Context context)
         {
-            ClearHistoryCommand = new DelegateCommand(ClearHistory);
+            ClearHistoryCommand = new RelayCommand(ClearHistory);
 
             _Context = context;
 
@@ -31,7 +31,7 @@ namespace LSMEmprunts
                 .Where(e => e.User == user).OrderByDescending(e => e.BorrowTime));
         }
 
-        public DelegateCommand ClearHistoryCommand { get; }
+        public RelayCommand ClearHistoryCommand { get; }
 
         private void ClearHistory()
         {

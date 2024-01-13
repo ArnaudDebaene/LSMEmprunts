@@ -1,6 +1,6 @@
-﻿using LSMEmprunts.Data;
-using Mvvm;
-using Mvvm.Commands;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using LSMEmprunts.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -67,7 +67,7 @@ namespace LSMEmprunts
         }
     }
 
-    public sealed class BorrowViewModel : BindableBase, IDisposable
+    public sealed class BorrowViewModel : ObservableObject, IDisposable
     {
         private readonly Context _Context;
 
@@ -125,9 +125,9 @@ namespace LSMEmprunts
         {
             _Context = ContextFactory.OpenContext();
 
-            ValidateCommand = new DelegateCommand(ValidateCmd, CanValidateCmd);
-            CancelCommand = new DelegateCommand(GoBackToHomeView);
-            SelectGearCommand = new DelegateCommand<GearBorrowInfo>(SelectGearCmd);
+            ValidateCommand = new RelayCommand(ValidateCmd, CanValidateCmd);
+            CancelCommand = new RelayCommand(GoBackToHomeView);
+            SelectGearCommand = new RelayCommand<GearBorrowInfo>(SelectGearCmd);
 
             _UsersList = _Context.Users.ToList();
             Users = CollectionViewSource.GetDefaultView(_UsersList);
@@ -240,7 +240,7 @@ namespace LSMEmprunts
             }
         }
 
-        public DelegateCommand ValidateCommand { get; }
+        public RelayCommand ValidateCommand { get; }
         private async void ValidateCmd()
         {
             AutoValidateTicker?.Dispose();
@@ -272,7 +272,7 @@ namespace LSMEmprunts
             return SelectedUser != null && BorrowedGears.Any();
         }
 
-        public DelegateCommand CancelCommand { get; }
+        public RelayCommand CancelCommand { get; }
         private void GoBackToHomeView()
         {
             MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
@@ -315,7 +315,7 @@ namespace LSMEmprunts
             set => SetProperty(ref _GearInputFocused, value);
         }
 
-        public DelegateCommand<GearBorrowInfo> SelectGearCommand { get; }
+        public RelayCommand<GearBorrowInfo> SelectGearCommand { get; }
         public async void SelectGearCmd(GearBorrowInfo info)
         {
             await SelectGearToBorrow(info.Gear);
@@ -346,7 +346,7 @@ namespace LSMEmprunts
 
             BorrowedGears.Add(gear);
 
-            ValidateCommand.RaiseCanExecuteChanged();
+            ValidateCommand.NotifyCanExecuteChanged();
 
             //start auto close ticker if required
             StartOrResetValidateTicker();

@@ -1,6 +1,6 @@
-﻿using LSMEmprunts.Data;
-using Mvvm;
-using Mvvm.Commands;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using LSMEmprunts.Data;
 using MvvmDialogs;
 using System;
 using System.Collections.ObjectModel;
@@ -12,24 +12,24 @@ using System.Threading;
 
 namespace LSMEmprunts
 {
-    public sealed class SettingsViewModel : BindableBase, IDisposable
+    public sealed class SettingsViewModel : ObservableObject, IDisposable
     {
         private readonly Context _Context;
 
         public SettingsViewModel()
         {
-            ValidateCommand = new DelegateCommand(ValidateCmd, CanValidateCmd);
-            CancelCommand = new DelegateCommand(GoBackToHomeView);
+            ValidateCommand = new RelayCommand(ValidateCmd, CanValidateCmd);
+            CancelCommand = new RelayCommand(GoBackToHomeView);
 
-            CreateGearCommand = new DelegateCommand(CreateGear);
-            DeleteGearCommand = new DelegateCommand<GearProxy>(DeleteGear);
-            GearHistoryCommand = new DelegateCommand<GearProxy>(ShowGearHistory);
-            GearsCsvCommand = new DelegateCommand(GearsCsv);
+            CreateGearCommand = new RelayCommand(CreateGear);
+            DeleteGearCommand = new RelayCommand<GearProxy>(DeleteGear);
+            GearHistoryCommand = new RelayCommand<GearProxy>(ShowGearHistory);
+            GearsCsvCommand = new RelayCommand(GearsCsv);
 
-            CreateUserCommand = new DelegateCommand(CreateUser);
-            DeleteUserCommand = new DelegateCommand<UserProxy>(DeleteUser);
-            UserHistoryCommand = new DelegateCommand<UserProxy>(ShowUserHistory);
-            UsersCsvCommand = new DelegateCommand(UsersCsv);
+            CreateUserCommand = new RelayCommand(CreateUser);
+            DeleteUserCommand = new RelayCommand<UserProxy>(DeleteUser);
+            UserHistoryCommand = new RelayCommand<UserProxy>(ShowUserHistory);
+            UsersCsvCommand = new RelayCommand(UsersCsv);
 
             _Context = ContextFactory.OpenContext();
 
@@ -43,6 +43,8 @@ namespace LSMEmprunts
             {
                 Gears.Add(BuildProxy(gear));
             }
+
+            UpdateProxiesHistoryStats();
         }
 
         public void Dispose()
@@ -64,7 +66,20 @@ namespace LSMEmprunts
         public ObservableCollection<UserProxy> Users { get; }
         public ObservableCollection<GearProxy> Gears { get; }
 
-        public DelegateCommand ValidateCommand { get; }
+        private DateTime _StatisticsStartDate = new(2020, 1, 1);
+        public DateTime StatisticsStartDate
+        {
+            get => _StatisticsStartDate;
+            set
+            {
+                if (SetProperty(ref _StatisticsStartDate, value))
+                {
+                    UpdateProxiesHistoryStats();
+                }
+            }
+        }
+
+        public RelayCommand ValidateCommand { get; }
 
         private void ValidateCmd()
         {
@@ -74,24 +89,26 @@ namespace LSMEmprunts
 
         private bool CanValidateCmd() => _IsDirty && !HasErrors;
 
-        public DelegateCommand CancelCommand { get; }
+        public RelayCommand CancelCommand { get; }
 
-        private void GoBackToHomeView()
-        {
-            MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
-        }
+        private void GoBackToHomeView() => MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
+
+        private bool _DirtyWatchingSuspended = false;
 
         private bool _IsDirty = false;
 
         private void SetDirty()
         {
-            _IsDirty = true;
-            ValidateCommand.RaiseCanExecuteChanged();
+            if (!_DirtyWatchingSuspended)
+            {
+                _IsDirty = true;
+                ValidateCommand.NotifyCanExecuteChanged();
+            }
         }
 
         public bool HasErrors => Gears.Any(e => e.HasErrors) || Users.Any(e => e.HasErrors);
 
-        public DelegateCommand CreateUserCommand { get; }
+        public RelayCommand CreateUserCommand { get; }
 
         private void CreateUser()
         {
@@ -100,7 +117,7 @@ namespace LSMEmprunts
             Users.Add(BuildProxy(user));
         }
 
-        public DelegateCommand<UserProxy> DeleteUserCommand { get; }
+        public RelayCommand<UserProxy> DeleteUserCommand { get; }
 
         private void DeleteUser(UserProxy u)
         {
@@ -109,7 +126,7 @@ namespace LSMEmprunts
             SetDirty();
         }
 
-        public DelegateCommand<UserProxy> UserHistoryCommand { get; }
+        public RelayCommand<UserProxy> UserHistoryCommand { get; }
 
         private async void ShowUserHistory(UserProxy u)
         {
@@ -121,7 +138,7 @@ namespace LSMEmprunts
             }
         }
 
-        public DelegateCommand UsersCsvCommand { get; }
+        public RelayCommand UsersCsvCommand { get; }
 
         private async void UsersCsv()
         {
@@ -134,15 +151,16 @@ namespace LSMEmprunts
             {
                 using (var writer = new StreamWriter(vm.FileName, false, Encoding.UTF8))
                 {
+                    writer.WriteLine("Nom;Licence;Téléphone;#Emprunts");
                     foreach (var user in Users)
                     {
-                        writer.WriteLine($"{user.Name};{user.LicenceScanId};{user.Phone}");
+                        writer.WriteLine($"{user.Name};{user.LicenceScanId};{user.Phone};{user.StatsBorrowsCount}");
                     }
                 }
             }
         }
 
-        public DelegateCommand CreateGearCommand { get; }
+        public RelayCommand CreateGearCommand { get; }
 
         private void CreateGear()
         {
@@ -151,7 +169,7 @@ namespace LSMEmprunts
             Gears.Add(BuildProxy(gear));
         }
 
-        public DelegateCommand<GearProxy> DeleteGearCommand { get; }
+        public RelayCommand<GearProxy> DeleteGearCommand { get; }
 
         private void DeleteGear(GearProxy g)
         {
@@ -160,7 +178,7 @@ namespace LSMEmprunts
             SetDirty();
         }
 
-        public DelegateCommand<GearProxy> GearHistoryCommand { get; }
+        public RelayCommand<GearProxy> GearHistoryCommand { get; }
 
         private async void ShowGearHistory(GearProxy g)
         {
@@ -172,7 +190,7 @@ namespace LSMEmprunts
             }
         }
 
-        public DelegateCommand GearsCsvCommand { get; }
+        public RelayCommand GearsCsvCommand { get; }
 
         private async void GearsCsv()
         {
@@ -185,10 +203,11 @@ namespace LSMEmprunts
             {
                 using (var writer = new StreamWriter(vm.FileName, false, Encoding.UTF8))
                 {
+                    writer.WriteLine("Type;Nom;Code;Taille;#Emprunts;Durée total emprunts");
                     var converter = new GearTypeToStringConverter();
                     foreach (var gear in Gears)
                     {
-                        writer.WriteLine($"{converter.Convert(gear.Type, typeof(string), null, Thread.CurrentThread.CurrentUICulture)};{gear.Name};{gear.BarCode}");
+                        writer.WriteLine($"{converter.Convert(gear.Type, typeof(string), null, Thread.CurrentThread.CurrentUICulture)};{gear.Name};{gear.BarCode};{gear.Size};{gear.StatsBorrowsCount};{gear.StatsBorrowsDuration}");
                     }
                 }
             }
@@ -212,6 +231,51 @@ namespace LSMEmprunts
 
         private void OnProxyPropertyChanged(object source, PropertyChangedEventArgs args) => SetDirty();
 
-        private void OnProxyErrorsChanged(object source, DataErrorsChangedEventArgs args) => ValidateCommand.RaiseCanExecuteChanged();
+        private void OnProxyErrorsChanged(object source, DataErrorsChangedEventArgs args) => ValidateCommand.NotifyCanExecuteChanged();
+
+        private void UpdateProxiesHistoryStats()
+        {
+            try
+            {
+                _DirtyWatchingSuspended = true;
+
+                var now = DateTime.Now;
+
+                var gearsStatQuery = from borrowing in _Context.Borrowings
+                                     where borrowing.BorrowTime >= StatisticsStartDate
+                                     orderby borrowing.BorrowTime
+                                     group borrowing by borrowing.GearId;
+                foreach(var gearHistory in gearsStatQuery) 
+                {
+                    var gearProxy = Gears.FirstOrDefault(e => e.Id == gearHistory.Key);
+                    if (gearProxy != null)
+                    {
+                        gearProxy.StatsBorrowsCount = gearHistory.Count();
+                        gearProxy.StatsBorrowsDuration = gearHistory.Aggregate(TimeSpan.Zero, (totalDuration, borrowing) =>
+                        {
+                            var borrowDuration = (borrowing.ReturnTime ?? now) - borrowing.BorrowTime;
+                            return totalDuration + borrowDuration;
+                        });
+                    }
+                }
+
+                var usersStatQuery = from borrowing in _Context.Borrowings
+                                     where borrowing.BorrowTime >= StatisticsStartDate
+                                     orderby borrowing.BorrowTime
+                                     group borrowing by borrowing.UserId;
+                foreach(var userHistory in usersStatQuery) 
+                {
+                    var userProxy = Users.FirstOrDefault(e=>e.Id == userHistory.Key);
+                    if (userProxy != null) 
+                    {
+                        userProxy.StatsBorrowsCount = userHistory.Count();
+                    }
+                }
+            }
+            finally
+            {
+                _DirtyWatchingSuspended = false;
+            }
+        }
     }
 }

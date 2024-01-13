@@ -1,4 +1,5 @@
 ﻿using LSMEmprunts.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,6 +16,8 @@ namespace LSMEmprunts
             EvaluateNameValidity();
             EvaluateBarCodeValidity();
         }
+
+        public int Id => WrappedElt.Id;
 
         public string Name
         {
@@ -76,6 +79,20 @@ namespace LSMEmprunts
                 SetProperty(e=>e.Size, value);
                 EvaluateSizeValidity();
             }
+        }
+
+        private TimeSpan _StatsBorrowsDuration;
+        public TimeSpan StatsBorrowsDuration
+        {
+            get => _StatsBorrowsDuration;
+            internal set => SetProperty(ref _StatsBorrowsDuration, value);
+        }
+
+        private int _StatsBorrowsCount;
+        public int StatsBorrowsCount
+        {
+            get => _StatsBorrowsCount;
+            set => SetProperty(ref _StatsBorrowsCount , value);
         }
 
         public static string[] AllowedTankSizes { get; } = 

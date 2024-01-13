@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:core="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:LSMEmprunts"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:WarningWindowViewModel}"
         Height="90" Width="500" WindowStyle="None" WindowStartupLocation="CenterOwner">
@@ -58,7 +57,7 @@
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <core:CallMethodAction TargetObject="{Binding }" MethodName="OnViewLoaded" />
+            <i:CallMethodAction TargetObject="{Binding }" MethodName="OnViewLoaded" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>

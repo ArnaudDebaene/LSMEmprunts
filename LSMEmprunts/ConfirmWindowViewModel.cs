@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Mvvm.Commands;
+using CommunityToolkit.Mvvm.Input;
 using MvvmDialogs.ViewModels;
 
 namespace LSMEmprunts
@@ -11,7 +11,7 @@ namespace LSMEmprunts
         public ConfirmWindowViewModel(string msg)
         {
             Message = msg;
-            ConfirmCommand=new DelegateCommand(ConfirmCmd);
+            ConfirmCommand=new RelayCommand(ConfirmCmd);
         }
 
         private readonly TaskCompletionSource<bool> _ResultTask = new TaskCompletionSource<bool>();
@@ -25,7 +25,7 @@ namespace LSMEmprunts
             base.RequestClose();
         }
 
-        public DelegateCommand ConfirmCommand { get; }
+        public RelayCommand ConfirmCommand { get; }
 
         private void ConfirmCmd()
         {

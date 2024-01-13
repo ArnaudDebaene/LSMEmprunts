@@ -1,4 +1,4 @@
-﻿using Mvvm;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using MvvmDialogs;
 using MvvmDialogs.ViewModels;
 using System;
@@ -8,7 +8,7 @@ using System.Windows.Threading;
 
 namespace LSMEmprunts
 {
-    public sealed class MainWindowViewModel : BindableBase
+    public sealed class MainWindowViewModel : ObservableObject
     {
         public static MainWindowViewModel Instance { get; } = new MainWindowViewModel();
 

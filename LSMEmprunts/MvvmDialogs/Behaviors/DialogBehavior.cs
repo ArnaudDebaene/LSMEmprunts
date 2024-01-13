@@ -70,7 +70,7 @@ namespace MvvmDialogs.Behaviors
                                     if (!DialogBoxViewModels.ContainsKey(collection))
                                         DialogBoxViewModels[collection] = new List<IDialogViewModel>();
                                     DialogBoxViewModels[collection].Add(viewModel);
-                                    AddDialog(viewModel, collection, d as Window);
+                                    AddDialog(viewModel, collection, parent);
                                 }
                             if (args.OldItems != null)
                                 foreach (IDialogViewModel viewModel in args.OldItems)
@@ -131,12 +131,11 @@ namespace MvvmDialogs.Behaviors
             }
 
             // is this resource a dialog box window?
-            else if (resource is Window)
+            else if (resource is Window dialog)
             {
                 var userViewModel = viewModel as IUserDialogViewModel;
                 if (userViewModel == null)
                     return;
-                var dialog = resource as Window;
                 dialog.DataContext = userViewModel;
                 DialogBoxes[userViewModel] = dialog;
                 userViewModel.DialogClosing += (sender, args) =>

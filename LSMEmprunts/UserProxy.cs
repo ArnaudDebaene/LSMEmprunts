@@ -16,6 +16,8 @@ namespace LSMEmprunts
             EvaluateLicenceScanIdValidity();
         }
 
+        public int Id => WrappedElt.Id;
+
         public string Name
         {
             get => WrappedElt.Name;
@@ -66,6 +68,13 @@ namespace LSMEmprunts
         {
             get => WrappedElt.Phone;
             set => SetProperty(e => e.Phone, value);
+        }
+
+        private int _StatsBorrowsCount;
+        public int StatsBorrowsCount
+        {
+            get => _StatsBorrowsCount;
+            set => SetProperty(ref _StatsBorrowsCount, value);
         }
     }
 }

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Globalization;
+using System.Threading;
 using System.Windows;
 
 namespace LSMEmprunts
@@ -13,5 +9,10 @@ namespace LSMEmprunts
     /// </summary>
     public partial class App : Application
     {
+        private void OnAppStartup(object sender, StartupEventArgs e)
+        {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("fr-FR");
+        }
     }
 }

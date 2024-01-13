@@ -1,7 +1,8 @@
-﻿using MvvmDialogs.Presenters;
+﻿using Microsoft.Win32;
+using MvvmDialogs.Presenters;
 using MvvmDialogs.ViewModels;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+
 
 namespace MvvmDialogs
 {
@@ -47,7 +48,7 @@ namespace MvvmDialogs
 
 
             var result = dlg.ShowDialog();
-            vm.ResultPromise.SetResult(result == DialogResult.OK);
+            vm.ResultPromise.SetResult(result ?? false);
 
             vm.Multiselect = dlg.Multiselect;
             vm.ReadOnlyChecked = dlg.ReadOnlyChecked;

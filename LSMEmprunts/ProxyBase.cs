@@ -46,6 +46,17 @@ namespace LSMEmprunts
             return true;
         }
 
+        protected bool SetProperty<T>(ref T backingField, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(backingField, value))
+            {
+                backingField = value;
+                RaisePropertyChanged(propertyName);
+                return true;
+            }
+            return false;
+        }
+
         private void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
