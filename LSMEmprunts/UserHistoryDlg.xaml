@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LSMEmprunts"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:UserHistoryDlgViewModel}"
-        Title="Historique Utilisateur" Height="600" Width="800" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
+        Title="Historique Utilisateur" Height="600" Width="800" WindowStyle="None" WindowStartupLocation="CenterOwner"
+        FontSize="18">
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -20,8 +21,8 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Nom" Binding="{Binding Gear.Name}" />
                 <DataGridTextColumn Header="Type" Binding="{Binding Gear.Type}" />
-                <DataGridTextColumn Header="Date d'emprunt" Binding="{Binding BorrowTime}" />
-                <DataGridTextColumn Header="Date de retour" Binding="{Binding ReturnTime}" />
+                <DataGridTextColumn Header="Date d'emprunt" Binding="{Binding BorrowTime, StringFormat=\{0:dd.MM.yy HH:mm\}}" />
+                <DataGridTextColumn Header="Date de retour" Binding="{Binding ReturnTime, StringFormat=\{0:dd.MM.yy HH:mm\}}" />
                 <DataGridTextColumn Header="Etat" Binding="{Binding State, Converter={StaticResource BorrowStateConverter}}" />
                 <DataGridTextColumn Header="Commentaire" Binding="{Binding Comment}" />
             </DataGrid.Columns>

@@ -55,7 +55,7 @@
                     <DataGridTextColumn Binding="{Binding User.Phone}" Header="Téléphone"/>
                     <DataGridTextColumn Binding="{Binding Gear.Type, Converter={StaticResource GearTypeConverter}}" Header="Type"/>
                     <DataGridTextColumn Binding="{Binding Gear, Converter={StaticResource GearDisplayNameConverter}}" Header="Matériel"/>
-                    <DataGridTextColumn Binding="{Binding BorrowTime}" Header="Date"/>
+                    <DataGridTextColumn Binding="{Binding BorrowTime, StringFormat=\{0:dd.MM.yy HH:mm\}}" Header="Date"/>
                 </DataGrid.Columns>
             </DataGrid>
             </Grid>

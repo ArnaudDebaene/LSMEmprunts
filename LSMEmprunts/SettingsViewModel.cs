@@ -20,6 +20,7 @@ namespace LSMEmprunts
         {
             ValidateCommand = new RelayCommand(ValidateCmd, CanValidateCmd);
             CancelCommand = new RelayCommand(GoBackToHomeView);
+            ShowBorrowOnPeriodCommand = new RelayCommand(ShowBorrowOnPeriod);
 
             CreateGearCommand = new RelayCommand(CreateGear);
             DeleteGearCommand = new RelayCommand<GearProxy>(DeleteGear);
@@ -93,6 +94,15 @@ namespace LSMEmprunts
 
         private void GoBackToHomeView() => MainWindowViewModel.Instance.CurrentPageViewModel = new HomeViewModel();
 
+        public RelayCommand ShowBorrowOnPeriodCommand { get; }
+
+        private void ShowBorrowOnPeriod()
+        {
+            var vm = new BorrowOnPeriodViewModel(_Context);
+            MainWindowViewModel.Instance.Dialogs.Add(vm);
+        }
+
+
         private bool _DirtyWatchingSuspended = false;
 
         private bool _IsDirty = false;
@@ -149,13 +159,11 @@ namespace LSMEmprunts
             MainWindowViewModel.Instance.Dialogs.Add(vm);
             if (await vm.Completion)
             {
-                using (var writer = new StreamWriter(vm.FileName, false, Encoding.UTF8))
+                using var writer = new StreamWriter(vm.FileName, false, Encoding.UTF8);
+                writer.WriteLine("Nom;Licence;Téléphone;#Emprunts");
+                foreach (var user in Users)
                 {
-                    writer.WriteLine("Nom;Licence;Téléphone;#Emprunts");
-                    foreach (var user in Users)
-                    {
-                        writer.WriteLine($"{user.Name};{user.LicenceScanId};{user.Phone};{user.StatsBorrowsCount}");
-                    }
+                    writer.WriteLine($"{user.Name};{user.LicenceScanId};{user.Phone};{user.StatsBorrowsCount}");
                 }
             }
         }
@@ -201,14 +209,12 @@ namespace LSMEmprunts
             MainWindowViewModel.Instance.Dialogs.Add(vm);
             if (await vm.Completion)
             {
-                using (var writer = new StreamWriter(vm.FileName, false, Encoding.UTF8))
+                using var writer = new StreamWriter(vm.FileName, false, Encoding.UTF8);
+                writer.WriteLine("Type;Nom;Code;Taille;#Emprunts;Durée total emprunts");
+                var converter = new GearTypeToStringConverter();
+                foreach (var gear in Gears)
                 {
-                    writer.WriteLine("Type;Nom;Code;Taille;#Emprunts;Durée total emprunts");
-                    var converter = new GearTypeToStringConverter();
-                    foreach (var gear in Gears)
-                    {
-                        writer.WriteLine($"{converter.Convert(gear.Type, typeof(string), null, Thread.CurrentThread.CurrentUICulture)};{gear.Name};{gear.BarCode};{gear.Size};{gear.StatsBorrowsCount};{gear.StatsBorrowsDuration}");
-                    }
+                    writer.WriteLine($"{converter.Convert(gear.Type, typeof(string), null, Thread.CurrentThread.CurrentUICulture)};{gear.Name};{gear.BarCode};{gear.Size};{gear.StatsBorrowsCount};{gear.StatsBorrowsDuration}");
                 }
             }
         }

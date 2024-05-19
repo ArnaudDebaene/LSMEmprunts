@@ -4,7 +4,7 @@ using System;
 
 namespace MvvmDialogs.ViewModels
 {
-    public abstract class ModalDialogViewModelBase : ObservableObject, IUserDialogViewModel
+    public abstract class ModalDialogViewModelBase : ObservableValidator, IUserDialogViewModel
     {
         protected ModalDialogViewModelBase()
         {

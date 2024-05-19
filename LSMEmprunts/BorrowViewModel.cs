@@ -217,8 +217,8 @@ namespace LSMEmprunts
 
         private async void AnalyzeSelectedGearId(string value)
         {
-            var valueLower = value.ToLowerInvariant();
-            var matchingGear = _Context.Gears.FirstOrDefault(e => e.Name.ToLowerInvariant() == valueLower);
+            var valueLower = value.ToLower();
+            var matchingGear = _Context.Gears.FirstOrDefault(e => e.Name.ToLower() == valueLower);
 
             if (matchingGear != null)
             {

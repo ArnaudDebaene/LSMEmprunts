@@ -47,6 +47,8 @@ namespace LSMEmprunts
             ValidateCommand = new RelayCommand(ValidateCmd, CanValidateCmd);
             CancelCommand = new RelayCommand(GoBackToHomeView);
 
+            ClosingBorrowings.CollectionChanged += (s, e) => ValidateCommand.NotifyCanExecuteChanged();
+
             _Context = ContextFactory.OpenContext();
 
             var gears = (from gear in _Context.Gears
@@ -80,8 +82,8 @@ namespace LSMEmprunts
             get => _SelectedGearId;
             set
             {
-                var valueLower = value.ToLowerInvariant();
-                var matchingGear = _Context.Gears.FirstOrDefault(e => e.Name.ToLowerInvariant() == valueLower);
+                var valueLower = value.ToLower();
+                var matchingGear = _Context.Gears.FirstOrDefault(e => e.Name.ToLower() == valueLower);
                 if (matchingGear != null)
                 {
                     System.Diagnostics.Debug.WriteLine("Found a matching gear by name");

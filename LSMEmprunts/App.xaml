@@ -33,6 +33,7 @@
         <local:PasswordDlg x:Key="{x:Type local:PasswordDlgViewModel}" x:Shared="false" />
         <local:WarningWindow x:Key="{x:Type local:WarningWindowViewModel}" x:Shared="false" />
         <local:ConfirmWindow x:Key="{x:Type local:ConfirmWindowViewModel}" x:Shared="False" />
+        <local:BorrowOnPeriodDlg x:Key="{x:Type local:BorrowOnPeriodViewModel}" x:Shared="false" />
 
         <!--Converters-->
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
