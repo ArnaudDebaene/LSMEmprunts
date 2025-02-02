@@ -247,11 +247,11 @@ namespace LSMEmprunts
 
                 var now = DateTime.Now;
 
-                var gearsStatQuery = from borrowing in _Context.Borrowings
+                var borrowingQuery = from borrowing in _Context.Borrowings
                                      where borrowing.BorrowTime >= StatisticsStartDate
                                      orderby borrowing.BorrowTime
-                                     group borrowing by borrowing.GearId;
-                foreach(var gearHistory in gearsStatQuery) 
+                                     select borrowing;
+                foreach(var gearHistory in borrowingQuery.AsEnumerable().GroupBy(borrowing => borrowing.GearId)) 
                 {
                     var gearProxy = Gears.FirstOrDefault(e => e.Id == gearHistory.Key);
                     if (gearProxy != null)
@@ -265,11 +265,7 @@ namespace LSMEmprunts
                     }
                 }
 
-                var usersStatQuery = from borrowing in _Context.Borrowings
-                                     where borrowing.BorrowTime >= StatisticsStartDate
-                                     orderby borrowing.BorrowTime
-                                     group borrowing by borrowing.UserId;
-                foreach(var userHistory in usersStatQuery) 
+                foreach(var userHistory in borrowingQuery.AsEnumerable().GroupBy(e=>e.UserId)) 
                 {
                     var userProxy = Users.FirstOrDefault(e=>e.Id == userHistory.Key);
                     if (userProxy != null) 

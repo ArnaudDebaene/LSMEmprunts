@@ -139,6 +139,7 @@ namespace LSMEmprunts
                 }
                 return ((User)item).Name.StartsWith(_SelectedUserText, StringComparison.CurrentCultureIgnoreCase);
             };
+            Users.SortDescriptions.Add(new SortDescription(nameof(User.Name), ListSortDirection.Ascending));
 
             var gears = (from gear in _Context.Gears
                     let borrowed = gear.Borrowings.Any(e => e.State == BorrowingState.Open)

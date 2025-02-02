@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LSMEmprunts"
         xmlns:dlgs="clr-namespace:MvvmDialogs.Behaviors"
         mc:Ignorable="d" 
-        Title="MainWindow" Height="768" Width="1024"
+        Title="LSM Emprunts" Height="768" Width="1024"
         DataContext="{x:Static local:MainWindowViewModel.Instance}"
         dlgs:DialogBehavior.DialogViewModels="{Binding Dialogs}"
         FontSize="22" WindowState="Maximized">
